@@ -1,0 +1,770 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+header {
+    width: 100%;
+    height: 60px;
+    background-color: #002e36;
+    color: white;
+    position: relative;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+header h1 {
+    font-weight: 500;
+    position: absolute;
+    top: 60%;
+    left: 50px;
+    transform: translate(0, -40%);
+    cursor: default;
+    font-size: 28px;
+}
+
+.main-center {
+    width: 100%;
+    height: 54px;
+    /* background-color: rgb(46, 107, 160); */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-center-center {
+    width: 98%;
+    height: 100%;
+    /* background-color: rgb(65, 84, 100); */
+    display: flex;
+    align-items: center;
+}
+
+.but-main-canter {
+    padding: 0 20px 0 20px;
+    height: 100%;
+    /* background-color: rgb(114, 114, 114); */
+    position: relative;
+    margin-left: 5px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.but-main-canter h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    margin-top: 20px;
+    color: rgb(124, 124, 124);
+    transition: 300ms ease;
+}
+
+.but-main-center-bottom {
+    width: 100%;
+    height: 4px;
+    border-radius: 3.5px;
+    background-color: rgb(219, 219, 219);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    transition: 300ms ease;
+}
+
+.add-company-but {
+    width: 10px;
+    height: 50px;
+    background-color: rgb(236, 236, 236);
+    position: absolute;
+    margin-left: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    left: 0;
+    transition: 300ms ease;
+    
+}
+
+.add-company-but:hover {
+    background-color: rgb(0, 79, 108);
+    color: white;
+}
+
+.but-main-canter:hover .but-main-center-bottom {
+    background-color: rgb(0, 79, 108);
+}
+
+.but-main-canter:hover h1 {
+    color: rgb(43, 42, 42);
+}
+
+.but-main-center-ready .but-main-center-bottom {
+    background-color: rgb(0, 133, 179);
+}
+
+.but-main-center-ready h1 {
+    color: rgb(43, 42, 42);
+}
+
+.generel-but-main-center {
+    width: max-content;
+    height: 100%;
+}
+
+/* ////////////////////////////////////////////// FILTER ////////////////////////////////////////////// */
+
+.center-filter {
+    width: 100%;
+    height: 50px;
+    background-color: #002e361f;
+    display: flex;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    align-items: center;
+}
+
+/* /////////////////// READY /////////////////// */
+
+#readycheckbox {
+    width: 20px;
+    height: 200px;
+    margin-left: 100px;
+    cursor: pointer;
+    background-color: #002e36;
+}
+
+.readycheckbox {
+    margin-left: 10px;
+    font-size: 20px;
+    background-color: rgba(73, 128, 0, 0.3);
+    padding: 0px 5px 0px 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* /////////////////// READY /////////////////// */
+
+/* /////////////////// OFF /////////////////// */
+
+#offcheckbox {
+    width: 20px;
+    height: 20px;
+    margin-left: 25px;
+    cursor: pointer;
+}
+
+.offcheckbox {
+    margin-left: 10px;
+    font-size: 20px;
+    background-color: rgba(128, 0, 0, 0.3);
+    padding: 0px 5px 0px 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* /////////////////// OFF /////////////////// */
+
+/* ////////////////////////////////////////////// FILTER ////////////////////////////////////////////// */
+.menu-but {
+    width: 20px;
+    height: 20px;
+    /* background-color: rgb(0, 0, 0); */
+    position: absolute;
+    left: 15px;
+    top: 20px;
+}
+
+.m-but {
+    width: 100%;
+    height: 2px;
+    border-radius: 1px;
+    background-color: rgb(255, 255, 255);
+    margin-top: 4px;
+}
+
+/* main */
+
+main {
+    width: 100%;
+    height: 82%;
+    /* background-color: blueviolet; */
+    position: absolute;
+    overflow: scroll;
+    background-color: rgb(248, 248, 248);
+}
+
+.main-tab {
+    /* width: 80%; */
+    height: 96%;
+    /* background-color: brown; */
+    position: absolute;
+    left: 2%;
+    top: 2%;
+}
+
+.tab {
+    width: 100%;
+    height: 50px;
+    border-radius: 6px;
+    background-color: white;
+    border: 1px solid rgb(204, 213, 222);
+    box-shadow: rgb(204, 213, 222) 0px 2px 4px 0px;
+    cursor: pointer;
+    margin-top: 5px;
+    position: relative;
+    /* overflow: visible; */
+    /* overflow: hidden; */
+    transition: 500ms ease;
+}
+
+.tab-general {
+    width: 100%;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+.tab-section {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border: 1px solid black; */
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    z-index: 2;
+}
+
+.id {
+    width: 50px;
+    font-weight: bold;
+    color: rgb(0, 104, 141);
+    z-index: -2;
+}
+
+.name {
+    width: 270px;
+    height: 100%;
+    padding: 0 25px 0 5px;
+    display: flex;
+    align-items: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    z-index: -2;
+    /* border: 1px solid black; */
+}
+
+.statusR {
+    /* padding: 0 20px 0 20px; */
+    width: 85px;
+    background-color: rgba(0, 128, 0, 0.4);
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 16px;
+    /* opacity: 0.2; */
+    user-select: none;
+}
+
+.statusO {
+    /* padding: 0 20px 0 20px; */
+    width: 85px;
+    background-color: rgba(128, 0, 0, 0.4);
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 16px;
+    /* opacity: 0.2; */
+    user-select: none;
+}
+
+.status-and {
+    margin-left: 7px;
+    padding: 0 20px 0 20px;
+    height: 100%;
+    background-color: rgb(172, 0, 0, 0.4);
+    border-radius: 10px;
+    font-weight: 600;
+    outline: none;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    border: none;
+    font-size: 16px;
+    user-select: none;
+
+}
+
+.from-time {}
+
+.from-time input {
+    margin-left: 10px;
+    outline: none;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    margin-left: 20px;
+}
+
+.till-time {}
+
+.till-time input {
+    outline: none;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    margin-left: 20px;
+
+}
+
+.location {
+    z-index: 4;
+}
+
+.location input {
+    width: 250px;
+    height: 100%;
+    border: 0;
+    outline: none;
+    background-color: hsl(0, 0%, 95%);
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 18px;
+    margin-left: 20px;
+    /* margin-right: 20px; */
+}
+
+.price {
+    font-weight: 400;
+}
+
+.top-tab {}
+
+/* width: 100%;
+    height: 25px;
+    border-radius: 6px;
+    background-color: white;
+    border: 1px solid rgb(204, 213, 222);
+    box-shadow: rgb(204, 213, 222) 0px 2px 4px 0px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 5px; */
+.bottom-tab {
+    width: 100%;
+    height: 25px;
+    left: 0;
+    position: absolute;
+    background-color: rgb(230, 230, 230);
+    z-index: 1;
+
+}
+
+.bottom-tab input {
+    /* background-color: transparent; */
+    border: 0;
+    outline: none;
+    width: 96%;
+    height: 80%;
+    position: absolute;
+    top: 10%;
+    left: 1%;
+    resize: none;
+    font-size: 18px;
+    padding-left: 10px;
+    color: rgb(90, 90, 90);
+    background-color: rgb(240, 240, 240);
+    z-index: 0;
+}
+
+.bottomTabImportant {
+    width: 20px;
+    height: 20px;
+    border: 2px solid grey;
+    color: grey;
+    background-color: transparent;
+    position: absolute;
+    top: 2px;
+    right: 0.5%;
+    z-index: 0;
+    border-radius: 100%;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+
+}
+
+.bottomTabImportantFalse {
+    border: 2px solid red;
+    color: red;
+}
+
+.bottomTabTextFalse input {
+    background-color: rgba(255, 0, 0, 0.116);
+    color: rgba(255, 0, 0, 0.623);
+}
+
+.off {
+    background-color: rgb(172, 0, 0, 0.4);
+}
+
+.load-Has {
+    background-color: rgba(255, 153, 1, 0.4)
+}
+
+.Sleeping {
+    background-color: rgba(18, 1, 255, 0.4)
+}
+
+.Completing {
+    background-color: rgba(110, 81, 0, 0.4)
+}
+
+.XRM {
+    background-color: rgba(151, 0, 118, 0.4)
+}
+
+.No-info {
+    background-color: rgba(145, 145, 145, 0.4)
+}
+
+.Deadhead {
+    background-color: rgba(123, 151, 0, 0.4)
+}
+
+.Ready {
+    background-color: rgba(111, 151, 0, 0.4)
+}
+
+.creat-div {
+    width: 500px;
+    height: 50px;
+    position: absolute;
+    left: -500px;
+    bottom: 70px;
+    background-color: rgb(238, 238, 238);
+    display: flex;
+    align-items: center;
+    transition: 400ms ease;
+    z-index: 100;
+    /* display: none; */
+}
+
+.creat {
+    width: 15px;
+    height: 50px;
+    position: absolute;
+    bottom: 0;
+    right: -15px;
+}
+
+#name-creat {
+    width: 250px;
+    height: 30px;
+    border: none;
+    padding: 0 0 0 10px;
+    margin-left: 50px;
+    outline: none;
+}
+
+#id-delet {
+    width: 50px;
+    height: 30px;
+    border: none;
+    padding: 0 0 0 10px;
+    margin-left: 20px;
+    outline: none;
+}
+
+.name-creat {
+    width: 30px;
+    height: 30px;
+}
+
+.id-delet {
+    width: 30px;
+    height: 30px;
+}
+
+.menuMousemove {
+    width: 100px;
+    height: 50px;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(231, 231, 231);
+    box-shadow: 0px 3px 5px 1px rgba(0, 0, 0, 0.055);
+    position: absolute;
+    right: -105px;
+    bottom: 10px;
+    z-index: 100;
+    user-select: none;
+
+}
+
+.menuMousemoveSetting {
+    width: 100%;
+    height: 50%;
+    transition: 300ms ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 0, 0, 0.5);
+    background-color: rgba(255, 0, 0, 0.137);
+}
+
+.menuMousemoveHR {
+    width: 96%;
+    margin-left: 2%;
+
+}
+
+.menuMousemoveGeneralDelet {
+    width: 100%;
+    height: 50%;
+    transition: 300ms ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(163, 163, 163);
+}
+
+.menuMousemoveSetting:hover {
+    background-color: rgba(255, 0, 0, 0.308);
+    color: rgba(255, 0, 0, 0.616);
+}
+
+.menuMousemoveGeneralDelet:hover {
+    background-color: rgb(238, 238, 238);
+
+    color: rgb(117, 117, 117);
+
+}
+
+/* .......... */
+
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #002e36;
+    margin-left: 35px;
+    user-select: none;
+}
+
+.custom-checkbox input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    /* border: 2px solid #ccc; */
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    background-color: white;
+    overflow: hidden;
+}
+
+.custom-checkbox input[type="checkbox"]:checked::before {
+    background-color: #002e36dc;
+    content: "✔";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 16px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+#city-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+#autocomplete-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    position: absolute;
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+#autocomplete-list li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#autocomplete-list li:hover {
+    background-color: #f0f0f0;
+}
+
+#autocomplete-list li.selected {
+    background-color: #d9e9ff;
+}
+
+.autocomplete-container {
+    position: relative;
+    width: 100%;
+}
+
+/* wdawdawd */
+
+body {
+    /* font-family: Arial, sans-serif; */
+    margin: 0;
+    padding: 0;
+    /* background-color: #f9f9f9; */
+}
+
+/* #city-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+} */
+
+.autocomplete-list {
+    list-style-type: none;
+    padding: 0;
+    /* margin: 0; */
+    background-color: white;
+    /* border: 1px solid #ddd; */
+    border-radius: 4px;
+    position: absolute;
+    width: 250px;
+    max-height: 300px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    z-index: 1000;
+    right: 0;
+    top: 55%;
+}
+
+.autocomplete-list li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.autocomplete-list li:hover {
+    background-color: #f0f0f0;
+}
+
+.autocomplete-list li.selected {
+    background-color: #d9e9ff;
+}
+
+/* .autocomplete-container {
+    position: relative;
+    width: 100%;
+} */
+
+.card {
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: grab;
+    transition: transform 0.2s ease;
+    user-select: none;
+    position: relative;
+}
+
+/* Когда блок тащится */
+.dragging {
+    opacity: 0.8;
+    /* transform: scale(1.03); */
+    z-index: 1000;
+}
+
+/* Подсветка при наведении */
+.placeholder {
+    /* border: 2px dashed #00ff0da1;
+    background-color: #fafafa; */
+}
+
+.filters {
+    width: 60px;
+    height: 30px;
+    margin-left: 20px;
+    font-size: 17px;
+    outline: none;
+    background-color: white;
+    border: none;
+    transition: 300ms ease;
+}
+
+.filters:hover {
+    background-color: #002e36c4;
+    color: white;
+}
+
+.filters:active {
+    animation: blink 0.2s ease;
+}
+
+@keyframes blink {
+    0% {
+        background-color: inherit;
+    }
+
+    50% {
+        background-color: #002e36;
+        /* или другой цвет */
+    }
+
+    100% {
+        background-color: inherit;
+    }
+}
+
+@keyframes blink {
+    0% {
+        background-color: inherit;
+    }
+
+    50% {
+        background-color: #002e36;
+    }
+
+    100% {
+        background-color: inherit;
+    }
+}
+
+.filters.blink {
+    animation: blink 0.2s ease;
+}

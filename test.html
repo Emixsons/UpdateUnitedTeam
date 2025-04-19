@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Перетаскиваемые блоки</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 40px;
+      background: #f0f0f0;
+    }
+
+    #container {
+      width: 400px;
+      margin: 0 auto;
+    }
+
+    /* Стили для карточки (div) */
+    .card {
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      cursor: grab;
+      transition: transform 0.2s ease;
+      user-select: none;
+      position: relative;
+    }
+
+    /* Когда блок тащится */
+    .dragging {
+      opacity: 0.8;
+      transform: scale(1.03);
+      z-index: 1000;
+    }
+
+    /* Подсветка при наведении */
+    .placeholder {
+      border: 2px dashed #aaa;
+      background-color: #fafafa;
+    }
+  </style>
+</head>
+<body>
+
+  <h2 style="text-align: center;">Перетаскивание блоков с анимацией</h2>
+
+  <!-- Контейнер, куда вставляются все div'ы -->
+  <div id="container"></div>
+
+  <script>
+    // Массив с данными — ты можешь сюда подставить свои объекты
+    const data = [
+      { id: 1, name: "🟦 Первый элемент" },
+      { id: 2, name: "🟧 Второй элемент" },
+      { id: 3, name: "🟨 Третий элемент" },
+      { id: 4, name: "🟥 Четвёртый элемент" },
+    ];
+
+    const container = document.getElementById("container");
+
+    let draggedEl = null;
+    let draggedIndex = null;
+
+    // Рендер всех блоков
+    function render() {
+      container.innerHTML = ''; // очищаем контейнер
+
+      data.forEach((item, index) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.textContent = item.name;
+        card.setAttribute("draggable", true);
+        card.dataset.index = index;
+
+        // Слушатели событий перетаскивания
+        card.addEventListener("dragstart", dragStart);
+        card.addEventListener("dragover", dragOver);
+        card.addEventListener("drop", drop);
+        card.addEventListener("dragend", dragEnd);
+        card.addEventListener("dragenter", dragEnter);
+        card.addEventListener("dragleave", dragLeave);
+
+        container.appendChild(card);
+      });
+    }
+
+    // Событие начала перетаскивания
+    function dragStart(e) {
+      draggedEl = e.target;
+      draggedIndex = +e.target.dataset.index;
+      e.target.classList.add("dragging");
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", ""); // нужно для Firefox
+    }
+
+    // При наведении на другой блок
+    function dragEnter(e) {
+      e.preventDefault();
+      if (e.target.classList.contains("card") && e.target !== draggedEl) {
+        e.target.classList.add("placeholder");
+      }
+    }
+
+    // Убираем подсветку
+    function dragLeave(e) {
+      e.target.classList.remove("placeholder");
+    }
+
+    // Разрешаем дроп
+    function dragOver(e) {
+      e.preventDefault();
+    }
+
+    // Когда отпускаем блок
+    function drop(e) {
+      e.preventDefault();
+      e.target.classList.remove("placeholder");
+
+      const targetIndex = +e.target.dataset.index;
+
+      if (targetIndex === draggedIndex) return;
+
+      // Меняем порядок в массиве
+      const draggedItem = data[draggedIndex];
+      data.splice(draggedIndex, 1); // убираем старую позицию
+      data.splice(targetIndex, 0, draggedItem); // вставляем в новую
+
+      render(); // перерисовываем всё
+    }
+
+    // Конец перетаскивания
+    function dragEnd(e) {
+      e.target.classList.remove("dragging");
+    }
+
+    // Первый рендер
+    render();
+  </script>
+</body>
+</html>
