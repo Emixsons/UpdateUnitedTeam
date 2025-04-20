@@ -897,6 +897,7 @@ function start() {
         tab.addEventListener("dragend", dragEnd);
         tab.addEventListener("dragenter", dragEnter);
         tab.addEventListener("dragleave", dragLeave);
+
         // swap ----------- //
     });
 }
@@ -905,6 +906,8 @@ function start() {
 ////////////////////////////////////////////// ---------------------- //////////////////////////////////////////////
 ////////////////////////////////////////////// ---------------------- //////////////////////////////////////////////
 
+let tabs = document.querySelectorAll('.tab')
+
 // Событие начала перетаскивания
 function dragStart(e) {
     draggedEl = e.target;
@@ -912,6 +915,7 @@ function dragStart(e) {
     e.target.classList.add("dragging");
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("text/plain", ""); // нужно для Firefox
+    document.body.classList.add("drag-cursor-grabbing");
 }
 
 // При наведении на другой блок
@@ -920,6 +924,8 @@ function dragEnter(e) {
     const enterTarget = e.target.closest(".tab");
     if (!enterTarget || enterTarget === draggedEl) return;
     enterTarget.classList.add("placeholder");
+    document.body.classList.remove("drag-cursor-grabbing");
+    document.body.classList.add("drag-cursor-grab");
 }
 // Убираем подсветку
 function dragLeave(e) {
@@ -927,6 +933,8 @@ function dragLeave(e) {
     const enterTarget = e.target.closest(".tab");
     if (!enterTarget || enterTarget === draggedEl) return;
     e.target.classList.remove("placeholder");
+    document.body.classList.remove("drag-cursor-grab");
+    document.body.classList.add("drag-cursor-grabbing");
 }
 // Разрешаем дроп
 function dragOver(e) {
@@ -949,6 +957,8 @@ function drop(e) {
 // Конец перетаскивания
 function dragEnd(e) {
     e.target.classList.remove("dragging");
+    document.body.classList.remove("drag-cursor-grabbing");
+    document.body.classList.remove("drag-cursor-grab");
 }
 // Swap ----------- //
 function loadFromLocalStorage() {
@@ -962,6 +972,7 @@ function loadFromLocalStorage() {
         });
     }
 }
+
 function saveToLocalStorage() {
     filters = masiv.map((item, index) => ({
         id: index + 1,
@@ -969,8 +980,6 @@ function saveToLocalStorage() {
     }));
     localStorage.setItem("tabsOrder", JSON.stringify(filters));
 }
-let tab = document.querySelector('.tab')
-let tabGeneral = document.querySelector('.tab-general')
 let creatDiv = document.querySelector('.creat-div')
 let creatss = document.querySelector('.creat')
 let nameCreat = document.querySelector('.name-creat')
@@ -980,7 +989,7 @@ let IidDelet = document.querySelector('#id-delet')
 let creatOffReady = false
 creatss.onclick = (() => {
     if (creatOffReady) {
-        creatDiv.style.left = '-500px'
+        creatDiv.style.left = '-50vh'
         creatOffReady = false
         creatss.innerHTML = '>'
     } else {
@@ -990,7 +999,7 @@ creatss.onclick = (() => {
     }
 })
 nameCreat.addEventListener('click', async () => {
-    creatDiv.style.left = '-500px'
+    creatDiv.style.left = '-50vh'
     creatOffReady = false
     creatss.innerHTML = '>'
     const nameInput = InameCreat.value.trim();
@@ -1013,7 +1022,7 @@ nameCreat.addEventListener('click', async () => {
 });
 
 idDelet.onclick = (() => {
-    creatDiv.style.left = '-500px'
+    creatDiv.style.left = '-50vh'
     creatOffReady = false
     creatss.innerHTML = '>'
     masiv.forEach((inp, ids) => {
