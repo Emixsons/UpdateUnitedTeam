@@ -65,13 +65,13 @@ import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, updateDoc
 
 /////////////////////// Конфигурация Firebase ///////////////////////
 const firebaseConfig = {
-    apiKey: "AIzaSyBvaiEvJM6WeyoRByqPNtnJKdUGAw7QpDM",
-    authDomain: "test-update-f5a84.firebaseapp.com",
-    projectId: "test-update-f5a84",
-    storageBucket: "test-update-f5a84.appspot.com",
-    messagingSenderId: "690505468617",
-    appId: "1:690505468617:web:72e8ba81905f9c35a75b18",
-    measurementId: "G-F91T9JKXQ7"
+    apiKey: "AIzaSyBZNS6meqgFrhKhXBZc3spCMHK9hGvSuZ0",
+    authDomain: "tokssaupdate.firebaseapp.com",
+    projectId: "tokssaupdate",
+    storageBucket: "tokssaupdate.firebasestorage.app",
+    messagingSenderId: "37522886443",
+    appId: "1:37522886443:web:ffe41cf86d55f902453f6e",
+    measurementId: "G-29QKNF40NH"
 };
 /////////////////////// ---------- ///////////////////////
 
@@ -1128,3 +1128,30 @@ function filtersButClear() {
 }
 filtersBut.addEventListener('click', filtersButClear);
 
+///////////////////////////////////////////////////////////
+const mainBox = document.querySelector(".main-tab");
+const positionMenu = document.querySelector(".positionMenu");
+const buttons = positionMenu.querySelectorAll("img");
+
+// Функция применить выравнивание и выделить активную кнопку
+function applyAlignment(alignValue) {
+    mainBox.style.alignItems = alignValue;
+    buttons.forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.align === alignValue);
+    });
+}
+
+// Загрузка при старте
+window.addEventListener("DOMContentLoaded", () => {
+    const savedAlign = localStorage.getItem("blockAlign") || "center";
+    applyAlignment(savedAlign);
+});
+
+// Обработка клика
+buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const align = btn.dataset.align;
+        localStorage.setItem("blockAlign", align);
+        applyAlignment(align);
+    });
+});
