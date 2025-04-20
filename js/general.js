@@ -593,12 +593,14 @@ function changeColorStatus(colors) {
         const elements = document.querySelectorAll(`.${className}`);
         elements.forEach(el => {
             el.style.backgroundColor = colorMap[className];
+            if (colors >= 0.8) {
+                el.style.color = 'white'
+            }else {
+                el.style.color = 'black'
+            }
         });
     }
 }
-
-
-
 
 const slider = document.getElementById("mySlider");
 const valueDisplay = document.getElementById("slider-value");
