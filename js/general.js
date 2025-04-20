@@ -570,6 +570,61 @@ customCheckboxNoInfo.addEventListener('change', function (d) {
     saveFilters()
 
 })
+
+
+function changeColorStatus(colors) {
+    if (typeof colors !== 'number' || isNaN(colors) || colors < 0 || colors > 1) {
+        console.warn('Неверное значение прозрачности:', colors);
+        return;
+    }
+
+    const colorMap = {
+        'off': `rgba(172, 0, 0, ${colors})`,
+        'load-Has': `rgba(255, 153, 1, ${colors})`,
+        'Sleeping': `rgba(18, 1, 255, ${colors})`,
+        'Completing': `rgba(110, 81, 0, ${colors})`,
+        'XRM': `rgba(151, 0, 118, ${colors})`,
+        'No-info': `rgba(145, 145, 145, ${colors})`,
+        'Deadhead': `rgba(123, 151, 0, ${colors})`,
+        'Ready': `rgba(111, 151, 0, ${colors})`
+    };
+
+    for (const className in colorMap) {
+        const elements = document.querySelectorAll(`.${className}`);
+        elements.forEach(el => {
+            el.style.backgroundColor = colorMap[className];
+        });
+    }
+}
+
+
+
+
+const slider = document.getElementById("mySlider");
+const valueDisplay = document.getElementById("slider-value");
+
+slider.addEventListener("input", () => {
+    valueDisplay.textContent = slider.value;
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const slider = document.getElementById("mySlider");
+
+    // Загружаем сохранённое значение при загрузке страницы
+    const savedValue = localStorage.getItem("mySlider");
+    if (savedValue !== null) {
+        slider.value = savedValue;
+        valueDisplay.textContent = savedValue;
+        changeColorStatus(parseFloat(savedValue))
+    }
+    
+    // Сохраняем значение при изменении
+    slider.addEventListener("input", () => {
+        changeColorStatus(parseFloat(slider.value))
+        localStorage.setItem("mySlider", slider.value);
+    });
+});
+
 /////////////////////// ---------- ///////////////////////
 let draggedEl = null;
 let draggedIndex = null;
@@ -607,6 +662,7 @@ function start() {
         var options8 = document.createElement('option')
         options1.innerHTML = 'Off'
         if (input.statusAnd == 'Off') {
+            statusAnd.classList.add('off')
             options1.setAttribute('selected', '')
         }
         options2.innerHTML = 'Load Has'
@@ -897,9 +953,10 @@ function start() {
         tab.addEventListener("dragend", dragEnd);
         tab.addEventListener("dragenter", dragEnter);
         tab.addEventListener("dragleave", dragLeave);
-
+        changeColorStatus(parseFloat(slider.value))
         // swap ----------- //
     });
+
 }
 ////////////////////////////////////////////// ---------------------- //////////////////////////////////////////////
 ////////////////////////////////////////////// ---------------------- //////////////////////////////////////////////
@@ -1155,3 +1212,5 @@ buttons.forEach(btn => {
         applyAlignment(align);
     });
 });
+/////////////////////////////
+
