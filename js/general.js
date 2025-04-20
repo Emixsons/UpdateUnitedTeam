@@ -187,7 +187,7 @@ function CompanyMenuCreat() {
         if (element.t) {
             butMainCanter.classList.add('but-main-center-ready')
         } else {
-            
+
         }
 
         butMainCanter.classList.add('but-main-canter')
@@ -388,14 +388,22 @@ let CenterFilterAnim = document.querySelector('.center-filter-anim')
 CenterFilterAnim.onclick = (() => {
     if (filterOnOff.centerFilter) {
         filterOnOff.centerFilter = false
-        centerFilter.style.top = '69px'
-        mainAnim.style.top = '119px'
-        mainAnim.style.height = '86%'
-    }else {
+        centerFilter.style.top = '7.5vh'
+        mainAnim.style.top = '12.5vh'
+        mainAnim.style.height = '87.5vh'
+    } else if (filterOnOff.centerFilter == false && filterOnOff.mainCenter == true) {
+        filterOnOff.mainCenter = false
+        mainCenter.style.top = '2vh'
+        centerFilter.style.top = '2.5vh'
+        mainAnim.style.top = '7.5vh'
+        mainAnim.style.height = '92.5vh'
+    } else {
         filterOnOff.centerFilter = true
-        centerFilter.style.top = '114px'
-        mainAnim.style.top = '164px'
-        mainAnim.style.height = '82%'
+        filterOnOff.mainCenter = true
+        mainCenter.style.top = '7vh'
+        centerFilter.style.top = '12vh'
+        mainAnim.style.top = '17vh'
+        mainAnim.style.height = '83vh'
     }
 })
 
