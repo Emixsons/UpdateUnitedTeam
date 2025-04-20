@@ -11,6 +11,7 @@ header {
     background-color: #002e36;
     color: white;
     position: relative;
+    z-index: 3;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
@@ -27,10 +28,14 @@ header h1 {
 .main-center {
     width: 100%;
     height: 54px;
-    /* background-color: rgb(46, 107, 160); */
+    background-color: rgb(255, 255, 255);
     display: flex;
     align-items: center;
+    transition: 500ms ease;
     justify-content: center;
+    z-index: 10;
+    position: absolute;
+    
 }
 
 .main-center-center {
@@ -84,7 +89,7 @@ header h1 {
     user-select: none;
     left: 0;
     transition: 300ms ease;
-    
+
 }
 
 .add-company-but:hover {
@@ -122,6 +127,25 @@ header h1 {
     display: flex;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     align-items: center;
+    position: absolute;
+    left: 0;
+    top: 114px;
+    transition: 500ms ease;
+    z-index: 0;
+}
+
+.center-filter-anim {
+    width: 100%;
+    height: 5px;
+    position: absolute;
+    background-color: #002e363d;
+    left: 0;
+    bottom: 0px;
+    transition: 400ms ease;
+}
+
+.center-filter-anim:hover {
+    background-color: #002e368c;
 }
 
 /* /////////////////// READY /////////////////// */
@@ -190,16 +214,15 @@ header h1 {
 main {
     width: 100%;
     height: 82%;
-    /* background-color: blueviolet; */
     position: absolute;
+    top: 164px;
     overflow: scroll;
     background-color: rgb(248, 248, 248);
+    transition: 500ms ease;
 }
 
 .main-tab {
-    /* width: 80%; */
     height: 96%;
-    /* background-color: brown; */
     position: absolute;
     left: 2%;
     top: 2%;
@@ -215,8 +238,6 @@ main {
     cursor: pointer;
     margin-top: 5px;
     position: relative;
-    /* overflow: visible; */
-    /* overflow: hidden; */
     transition: 500ms ease;
 }
 
@@ -237,7 +258,6 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* border: 1px solid black; */
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-weight: 600;
     z-index: 2;
@@ -259,17 +279,14 @@ main {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-weight: 600;
     z-index: -2;
-    /* border: 1px solid black; */
 }
 
 .statusR {
-    /* padding: 0 20px 0 20px; */
     width: 85px;
     background-color: rgba(0, 128, 0, 0.4);
     border-radius: 10px;
     font-weight: 600;
     font-size: 16px;
-    /* opacity: 0.2; */
     user-select: none;
 }
 

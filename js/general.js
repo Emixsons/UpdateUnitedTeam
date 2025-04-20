@@ -13,8 +13,6 @@ let mainTab = document.querySelector('.main-tab')
 // setInterval(updateClock, 60000); // обновлять каждую секунду
 // updateClock();
 
-
-
 /////////////////////// хранилище ///////////////////////
 let generalMasiv = []
 let masivfilter = []
@@ -46,10 +44,8 @@ function updateTillTime() {
     masiv.forEach((input, index) => {
         if (input.tillTime) {
             if (hasTimePassed(input.tillTime)) {
-                // console.log('⏰ Время уже прошло');
                 tillInputs[index].style.backgroundColor = 'rgb(172, 0, 0, 0.4)'
             } else {
-                // console.log('🕒 Ещё не время');
             }
         }
     });
@@ -97,7 +93,6 @@ async function saveDataCompany(name) {
     }
     listenToDataCompany()
     saveCompanyTrue()
-    updateMenuPlas()
 }
 /////////////////////// ---------- ///////////////////////
 
@@ -138,16 +133,13 @@ function listenToDataCompany() {
             },)
         });
         const dataCompanyTrue = localStorage.getItem('CompanyTrue')
-        // console.log(JSON.parse(dataCompanyTrue));
         if (JSON.parse(dataCompanyTrue)) {
             companyTrue = JSON.parse(dataCompanyTrue)
-            console.log(companyTrue);
 
             filterCompanyTrue()
         } else {
             saveCompanyTrue()
         }
-        updateMenuPlas()
         CompanyMenuCreat()  // вызываем перерисовку сайта
     });
 }
@@ -168,11 +160,10 @@ async function deleteDataCompany(documentId, nameCompany) {
     }
     try {
         await deleteDoc(doc(db, "company", documentId));
-        
+
         localStorage.removeItem('CompanyTrue');
         listenToDataCompany(); // чтобы обновить список после удаления
         CompanyMenuCreat()
-        updateMenuPlas()
     } catch (e) {
         console.error("Ошибка при удалении документа:", e);
     }
@@ -181,21 +172,6 @@ async function deleteDataCompany(documentId, nameCompany) {
 /////////////////////// ---------- ///////////////////////
 
 listenToDataCompany();
-updateMenuPlas() // запуск получения и обработки данных о компании
-
-/////////////////////// смотрит за включением и выключением меню добовления ///////////////////////
-// let creatDiv2 = document.querySelector('.creat-div')
-function updateMenuPlas() {
-    //     companyTrue.forEach(element => {
-    //         if (element.t === true) {
-    //             creatDiv2.style.left = '-500px'
-    //         } else {
-    //             // alert('daw')
-    //             creatDiv2.style.left = '-600px'
-    //         }
-    //     });
-}
-/////////////////////// ---------- ///////////////////////
 
 /////////////////////// получаем доступ и дайом логику кнопкам компании ///////////////////////
 let mainCenterCenter = document.querySelector('.main-center-center')
@@ -211,7 +187,7 @@ function CompanyMenuCreat() {
         if (element.t) {
             butMainCanter.classList.add('but-main-center-ready')
         } else {
-            console.log(false);
+            
         }
 
         butMainCanter.classList.add('but-main-canter')
@@ -239,17 +215,14 @@ function CompanyMenuCreat() {
         element.onclick = (() => {
             updateCompanyTrue()
             element.classList.add('but-main-center-ready')
-            console.log(butMainCanterButH1[index].innerHTML);
             companyTrue.forEach((elementIn, indexIn) => {
                 if (butMainCanterButH1[index].innerHTML === elementIn.name) {
                     updateCompanyTrueMasiv()
                     elementIn.t = true
-                    console.log(companyTrue);
                     saveCompanyTrue()
                 }
             });
             listenToData()
-            updateMenuPlas()
         })
     });
 }
@@ -364,12 +337,8 @@ function listenToData() {
 async function deleteData(documentId) {
     try {
         await deleteDoc(doc(db, "masiv", documentId));
-        // console.log("Документ удалён:", documentId);
-        // alert("Документ удалён");
-
         listenToData(); // чтобы обновить список после удаления
         start(); // перерисовка
-        // location.reload()
     } catch (e) {
         console.error("Ошибка при удалении документа:", e);
     }
@@ -405,7 +374,31 @@ let filter = {
     NoInfo: true,
     Off: true,
 } // нужен для фильтра по статусу
+
+let filterOnOff = {
+    centerFilter: true,
+    mainCenter: true,
+}
 let centerFilter = document.querySelector('.center-filter')
+let mainAnim = document.querySelector('main')
+let mainCenter = document.querySelector('.main-center')
+
+let CenterFilterAnim = document.querySelector('.center-filter-anim')
+
+CenterFilterAnim.onclick = (() => {
+    if (filterOnOff.centerFilter) {
+        filterOnOff.centerFilter = false
+        centerFilter.style.top = '69px'
+        mainAnim.style.top = '119px'
+        mainAnim.style.height = '86%'
+    }else {
+        filterOnOff.centerFilter = true
+        centerFilter.style.top = '114px'
+        mainAnim.style.top = '164px'
+        mainAnim.style.height = '82%'
+    }
+})
+
 /////////////////////// сохраняет в логальную базу для фильтра по статусу ///////////////////////
 function saveFilters() {
     localStorage.setItem('filter', JSON.stringify(filter));
@@ -572,9 +565,14 @@ customCheckboxNoInfo.addEventListener('change', function (d) {
 /////////////////////// ---------- ///////////////////////
 let draggedEl = null;
 let draggedIndex = null;
+
+////////////////////////////////////////////// СОЗДАНИЯ ЯЧЕЕК ТАБЛИЦЫ //////////////////////////////////////////////
+////////////////////////////////////////////// СОЗДАНИЯ ЯЧЕЕК ТАБЛИЦЫ //////////////////////////////////////////////
+////////////////////////////////////////////// СОЗДАНИЯ ЯЧЕЕК ТАБЛИЦЫ //////////////////////////////////////////////
+////////////////////////////////////////////// СОЗДАНИЯ ЯЧЕЕК ТАБЛИЦЫ //////////////////////////////////////////////
 function start() {
     idTabs = 0 // нужен для подсчета
-    mainTab.innerHTML = '' // очищайет для перерисовки
+    mainTab.innerHTML = '' // очищайет для перерисовки  
     masiv.forEach((input, index) => {
         idTabs += 1
         input.id = idTabs
@@ -684,10 +682,8 @@ function start() {
 
         if (input.tillTime) {
             if (hasTimePassed(input.tillTime)) {
-                console.log('⏰ Время уже прошло');
                 tillInput.style.backgroundColor = 'rgb(172, 0, 0, 0.4)'
             } else {
-                console.log('🕒 Ещё не время');
             }
         }
         ////////////////////// сравнивает время ////////////////////// 
@@ -706,6 +702,7 @@ function start() {
         var bottomTabText = document.createElement('input')
         localInput.setAttribute('type', 'text')
         bottomTabText.value = input.bottomTabText
+        bottomTabText.setAttribute('placeholder', 'Note:')
         bottomTabText.addEventListener('change', function (s) {
             input.bottomTabText = s.target.value
             updateData(input.idPass, { bottomTabText: s.target.value, })
@@ -895,6 +892,11 @@ function start() {
         // swap ----------- //
     });
 }
+////////////////////////////////////////////// ---------------------- //////////////////////////////////////////////
+////////////////////////////////////////////// ---------------------- //////////////////////////////////////////////
+////////////////////////////////////////////// ---------------------- //////////////////////////////////////////////
+////////////////////////////////////////////// ---------------------- //////////////////////////////////////////////
+
 // Событие начала перетаскивания
 function dragStart(e) {
     draggedEl = e.target;
@@ -902,8 +904,6 @@ function dragStart(e) {
     e.target.classList.add("dragging");
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("text/plain", ""); // нужно для Firefox
-    // console.log();
-
 }
 
 // При наведении на другой блок
@@ -1000,9 +1000,7 @@ nameCreat.addEventListener('click', async () => {
         alert('Компания не выбрана!')
     } else {
         await saveData(nameInput, companys);
-        console.log(companys);
     }
-    console.log(masiv);
     InameCreat.value = ''
 });
 
