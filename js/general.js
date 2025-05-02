@@ -21,7 +21,9 @@ let masiv = []
 let masivOff = []
 let filters = []
 let company = []
+let companyFilter = []
 let companyTrue = []
+
 /////////////////////// ---------- ///////////////////////
 
 /////////////////////// обновления часов ///////////////////////
@@ -104,17 +106,17 @@ function saveCompanyTrue() {
 
 /////////////////////// Обнаруживает изменения в базе ///////////////////////
 function filterCompanyTrue() {
-    if (company.length === companyTrue.length) {
-        company = companyTrue
+    if (companyFilter.length === companyTrue.length) {
+        companyFilter = companyTrue
     } else {
         companyTrue.forEach(element => {
-            company.forEach(input => {
+            companyFilter.forEach(input => {
                 if (element.name === input.name) {
                     input.t = element.t
                 }
             });
         });
-        localStorage.setItem("CompanyTrue", JSON.stringify(company));
+        localStorage.setItem("CompanyTrue", JSON.stringify(companyFilter));
     }
 }
 /////////////////////// ---------- ///////////////////////
@@ -123,10 +125,11 @@ function filterCompanyTrue() {
 function listenToDataCompany() {
     const q = collection(db, "company");
     onSnapshot(q, (snapshot) => {
+        companyFilter = []
         company = []
         snapshot.forEach((doc) => {
             let data = doc.data(); // получаем данные  
-            company.push({
+            companyFilter.push({
                 name: data.name,
                 idPass: doc.id,
                 t: false,
@@ -141,9 +144,10 @@ function listenToDataCompany() {
             saveCompanyTrue()
         }
         CompanyMenuCreat()  // вызываем перерисовку сайта
+        startFilterC()
     });
 }
-/////////////////////// Получение всех компаний ///////////////////////
+/////////////////////// ---------------- ///////////////////////
 
 /////////////////////// Удаления компаний а также драйверов ///////////////////////
 async function deleteDataCompany(documentId, nameCompany) {
@@ -171,10 +175,10 @@ async function deleteDataCompany(documentId, nameCompany) {
 
 /////////////////////// ---------- ///////////////////////
 
+let mainCenterCenter = document.querySelector('.main-center-center')
 listenToDataCompany();
 
 /////////////////////// получаем доступ и дайом логику кнопкам компании ///////////////////////
-let mainCenterCenter = document.querySelector('.main-center-center')
 function CompanyMenuCreat() {
     mainCenterCenter.innerHTML = ''
     company.forEach((element, index) => { // создаем сами кнопки для компании
@@ -195,6 +199,18 @@ function CompanyMenuCreat() {
 
         mainCenterCenter.append(butMainCanter)
         butMainCanter.append(butMainCanterH1, butMainCenterBottom)
+        // Search Local //
+        butMainCanter.setAttribute("draggable", true);
+        butMainCanter.dataset.index = index;
+        // Слушатели событий перетаскивания
+        butMainCanter.addEventListener("dragstart", dragStartC);
+        butMainCanter.addEventListener("dragover", dragOverC);
+        butMainCanter.addEventListener("drop", dropC);
+        butMainCanter.addEventListener("dragend", dragEndC);
+        butMainCanter.addEventListener("dragenter", dragEnterC);
+        butMainCanter.addEventListener("dragleave", dragLeaveC);
+        changeColorStatus(parseFloat(slider.value))
+        // swap ----------- //
     });
     let butMainCanterBut = document.querySelectorAll('.but-main-canter')
     let butMainCanterButH1 = document.querySelectorAll('.but-main-canter h1')
@@ -225,7 +241,97 @@ function CompanyMenuCreat() {
             listenToData()
         })
     });
+    console.log(companyFilter);
 }
+
+
+let tabs2 = document.querySelectorAll('.but-main-canter')
+
+// Событие начала перетаскивания
+function dragStartC(e) {
+    draggedEl = e.target;
+    draggedIndex = +e.target.dataset.index;
+    e.target.classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", ""); // нужно для Firefox
+    document.body.classList.add("drag-cursor-grabbing");
+}
+
+// При наведении на другой блок
+function dragEnterC(e) {
+    e.preventDefault();
+    const enterTarget = e.target.closest(".but-main-canter");
+    if (!enterTarget || enterTarget === draggedEl) return;
+    enterTarget.classList.add("placeholder");
+    document.body.classList.remove("drag-cursor-grabbing");
+    document.body.classList.add("drag-cursor-grab");
+}
+// Убираем подсветку
+function dragLeaveC(e) {
+    e.preventDefault();
+    const enterTarget = e.target.closest(".but-main-canter");
+    if (!enterTarget || enterTarget === draggedEl) return;
+    e.target.classList.remove("placeholder");
+    document.body.classList.remove("drag-cursor-grab");
+    document.body.classList.add("drag-cursor-grabbing");
+}
+// Разрешаем дроп
+function dragOverC(e) {
+    e.preventDefault();
+}
+// Когда отпускаем блок
+function dropC(e) {
+    e.preventDefault();
+    const dropTarget = e.target.closest(".but-main-canter");
+    if (!dropTarget || dropTarget === draggedEl) return;
+    dropTarget.classList.remove("placeholder");
+    const targetIndex = +dropTarget.dataset.index;
+    if (targetIndex === draggedIndex) return;
+    const draggedItem = company[draggedIndex];
+    company.splice(draggedIndex, 1);
+    company.splice(targetIndex, 0, draggedItem);
+    saveToLocalStorageC()
+    CompanyMenuCreat();
+}
+// Конец перетаскивания
+function dragEndC(e) {
+    e.target.classList.remove("dragging");
+    document.body.classList.remove("drag-cursor-grabbing");
+    document.body.classList.remove("drag-cursor-grab");
+}
+// Swap ----------- //
+function loadFromLocalStorageC() {
+    const data = localStorage.getItem("tabsOrder2");
+    if (data) {
+        filters = JSON.parse(data);
+        company.sort((a, b) => {
+            const indexA = filters.findIndex(f => f.idPass === a.idPass);
+            const indexB = filters.findIndex(f => f.idPass === b.idPass);
+            return indexA - indexB;
+        });
+    }
+}
+
+function saveToLocalStorageC() {
+    filters = company.map((item, index) => ({
+        id: index + 1,
+        idPass: item.idPass,
+    }));
+    localStorage.setItem("tabsOrder2", JSON.stringify(company));
+}
+
+function startFilterC() {
+    companyFilter.forEach((init) => {
+        company.push(init)
+        // company.sort((a, b) => a.name.localeCompare(b.name));
+    });
+    console.log(company);
+    console.log(companyFilter);
+
+    loadFromLocalStorageC();
+    CompanyMenuCreat()
+}
+
 /////////////////////// ---------- ///////////////////////
 
 /////////////////////// добовления компаний и логига действия ///////////////////////
@@ -276,6 +382,7 @@ async function saveData(name, company) {
         bottomTabText: '',
         notesImportant: true,
         company: company,
+        LongIsland: true
     }; // таблица ключей для сохранения в базу данных 
     try {
         const docRef = doc(collection(db, "masiv"));
@@ -313,6 +420,7 @@ function listenToData() {
                     bottomTabText: doc.data().bottomTabText,
                     notesImportant: doc.data().notesImportant,
                     company: doc.data().company,
+                    LongIsland: doc.data().LongIsland,
                 },) // кидает в масив для фильтрации
             }
             generalMasiv.push({
@@ -326,6 +434,7 @@ function listenToData() {
                 bottomTabText: doc.data().bottomTabText,
                 notesImportant: doc.data().notesImportant,
                 company: doc.data().company,
+                LongIsland: doc.data().LongIsland,
             },) // нужен для удаления компаний с их нимим драйверами
         });
         startFilter(); // вызываем перерисовку сайта
@@ -388,22 +497,28 @@ let CenterFilterAnim = document.querySelector('.center-filter-anim')
 CenterFilterAnim.onclick = (() => {
     if (filterOnOff.centerFilter) {
         filterOnOff.centerFilter = false
-        centerFilter.style.top = '7.5vh'
-        mainAnim.style.top = '12.5vh'
-        mainAnim.style.height = '87.5vh'
+        centerFilter.style.top = '7vh'
+        mainAnim.style.top = '15vh'
+        mainAnim.style.height = '84vh'
+        CenterFilterAnim.style.top = '12vh'
+        CenterFilterAnim.innerHTML = '▲'
     } else if (filterOnOff.centerFilter == false && filterOnOff.mainCenter == true) {
         filterOnOff.mainCenter = false
         mainCenter.style.top = '2vh'
-        centerFilter.style.top = '2.5vh'
-        mainAnim.style.top = '7.5vh'
-        mainAnim.style.height = '92.5vh'
+        centerFilter.style.top = '2vh'
+        mainAnim.style.top = '10vh'
+        CenterFilterAnim.style.top = '7vh'
+        CenterFilterAnim.innerHTML = '▼'
+        mainAnim.style.height = '89vh'
     } else {
         filterOnOff.centerFilter = true
         filterOnOff.mainCenter = true
         mainCenter.style.top = '7vh'
         centerFilter.style.top = '12vh'
-        mainAnim.style.top = '17vh'
-        mainAnim.style.height = '83vh'
+        mainAnim.style.top = '20vh'
+        CenterFilterAnim.style.top = '17vh'
+        CenterFilterAnim.innerHTML = '▲'
+        mainAnim.style.height = '80vh'
     }
 })
 
@@ -595,7 +710,7 @@ function changeColorStatus(colors) {
             el.style.backgroundColor = colorMap[className];
             if (colors >= 0.8) {
                 el.style.color = 'white'
-            }else {
+            } else {
                 el.style.color = 'black'
             }
         });
@@ -619,7 +734,7 @@ document.addEventListener("DOMContentLoaded", () => {
         valueDisplay.textContent = savedValue;
         changeColorStatus(parseFloat(savedValue))
     }
-    
+
     // Сохраняем значение при изменении
     slider.addEventListener("input", () => {
         changeColorStatus(parseFloat(slider.value))
@@ -709,6 +824,8 @@ function start() {
             options8.setAttribute('selected', '')
             input.statu = true
         }
+        var LongIsland = document.createElement('div')
+        LongIsland.innerHTML = 'Long Island'
 
         var fromTime = document.createElement('div')
         var fromInput = document.createElement('input')
@@ -868,11 +985,19 @@ function start() {
         menuMousemoveSetting.classList.add('menuMousemoveSetting')
         menuMousemoveGeneralDelet.classList.add('menuMousemoveGeneralDelet')
         ulLocal.classList.add('autocomplete-list')
+        LongIsland.classList.add('LongIsland')
+        if (input.LongIsland) {
+            LongIsland.classList.add('Ready')
+        } else {
+            LongIsland.classList.add('off')
+        }
+        let hr = document.createElement('hr')
+        hr.classList.add('hr')
         mainTab.append(tab)
         tab.append(tabGeneral, bottomTab, ulLocal)
         bottomTab.append(bottomTabText, bottomTabImportant, menuMousemove)
         menuMousemove.append(menuMousemoveSetting, menuMousemoveGeneralDelet)
-        tabGeneral.append(id, name, statusAnd, fromTime, tillTime, location,)
+        tabGeneral.append(id, name, statusAnd, fromTime, tillTime,LongIsland, location, )
         fromTime.append(fromInput)
         tillTime.append(tillInput)
         location.append(localInput)
@@ -957,6 +1082,51 @@ function start() {
         tab.addEventListener("dragleave", dragLeave);
         changeColorStatus(parseFloat(slider.value))
         // swap ----------- //
+
+        /////////////// условия удерживания кнопки Long Island ///////////////
+        let holdTimer = null;
+
+        // Время анимации — 500ms (должно совпадать с CSS)
+        const animationDuration = 2000;
+
+        function longPressAction() {
+            if (input.LongIsland) {
+                updateData(input.idPass, { LongIsland: false, })
+                input.LongIsland = false
+                // Здесь твоя логика для "Да"
+            } else {
+                input.LongIsland = true
+                updateData(input.idPass, { LongIsland: true, })
+                // Здесь твоя логика для "Нет"
+            }
+            start()
+        }
+
+        LongIsland.addEventListener('mousedown', () => {
+            holdTimer = setTimeout(() => {
+                longPressAction();
+            }, animationDuration);
+        });
+
+        LongIsland.addEventListener('mouseup', () => {
+            clearTimeout(holdTimer); // Если отпустил раньше — сброс
+        });
+
+        LongIsland.addEventListener('mouseleave', () => {
+            clearTimeout(holdTimer); // Если ушёл курсором — сброс
+        });
+
+        // Для мобильных:
+        LongIsland.addEventListener('touchstart', () => {
+            holdTimer = setTimeout(() => {
+                longPressAction();
+            }, animationDuration);
+        });
+
+        LongIsland.addEventListener('touchend', () => {
+            clearTimeout(holdTimer);
+        });
+        /////////////// -------------------------------------- ///////////////
     });
 
 }
@@ -1124,6 +1294,7 @@ function startFilter() {
         masivfilter.forEach((init) => {
             if (init.statusAnd == 'Ready') {
                 filterReadyReady.push(init)
+                filterReadyReady.sort((a, b) => a.name.localeCompare(b.name));
             }
         });
         filterReadyReady.sort((a, b) => {
@@ -1216,3 +1387,21 @@ buttons.forEach(btn => {
 });
 /////////////////////////////
 
+let menuBut = document.querySelector('.menu-but')
+let aside = document.querySelector('aside')
+
+let asideTrue = false
+
+
+menuBut.onclick = (() => {
+    if (asideTrue) {
+        asideTrue = false
+        aside.style.left = '-50vh'
+        const savedAlign = localStorage.getItem("blockAlign") || "center";
+        applyAlignment(savedAlign);
+    } else {
+        asideTrue = true
+        aside.style.left = '0'
+        mainBox.style.alignItems = 'flex-end';
+    }
+})
