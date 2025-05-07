@@ -382,7 +382,8 @@ async function saveData(name, company) {
         bottomTabText: '',
         notesImportant: true,
         company: company,
-        LongIsland: true
+        LongIsland: true,
+        queue: '',
     }; // таблица ключей для сохранения в базу данных 
     try {
         const docRef = doc(collection(db, "masiv"));
@@ -421,6 +422,7 @@ function listenToData() {
                     notesImportant: doc.data().notesImportant,
                     company: doc.data().company,
                     LongIsland: doc.data().LongIsland,
+                    queue: doc.data().queue,
                 },) // кидает в масив для фильтрации
             }
             generalMasiv.push({
@@ -435,6 +437,7 @@ function listenToData() {
                 notesImportant: doc.data().notesImportant,
                 company: doc.data().company,
                 LongIsland: doc.data().LongIsland,
+                queue: doc.data().queue,
             },) // нужен для удаления компаний с их нимим драйверами
         });
         startFilter(); // вызываем перерисовку сайта
@@ -484,43 +487,7 @@ let filter = {
     Off: true,
 } // нужен для фильтра по статусу
 
-let filterOnOff = {
-    centerFilter: true,
-    mainCenter: true,
-}
-let centerFilter = document.querySelector('.center-filter')
-let mainAnim = document.querySelector('main')
-let mainCenter = document.querySelector('.main-center')
 
-let CenterFilterAnim = document.querySelector('.center-filter-anim')
-
-CenterFilterAnim.onclick = (() => {
-    if (filterOnOff.centerFilter) {
-        filterOnOff.centerFilter = false
-        centerFilter.style.top = '7vh'
-        mainAnim.style.top = '15vh'
-        mainAnim.style.height = '84vh'
-        CenterFilterAnim.style.top = '12vh'
-        CenterFilterAnim.innerHTML = '▲'
-    } else if (filterOnOff.centerFilter == false && filterOnOff.mainCenter == true) {
-        filterOnOff.mainCenter = false
-        mainCenter.style.top = '2vh'
-        centerFilter.style.top = '2vh'
-        mainAnim.style.top = '10vh'
-        CenterFilterAnim.style.top = '7vh'
-        CenterFilterAnim.innerHTML = '▼'
-        mainAnim.style.height = '89vh'
-    } else {
-        filterOnOff.centerFilter = true
-        filterOnOff.mainCenter = true
-        mainCenter.style.top = '7vh'
-        centerFilter.style.top = '12vh'
-        mainAnim.style.top = '20vh'
-        CenterFilterAnim.style.top = '17vh'
-        CenterFilterAnim.innerHTML = '▲'
-        mainAnim.style.height = '80vh'
-    }
-})
 
 /////////////////////// сохраняет в логальную базу для фильтра по статусу ///////////////////////
 function saveFilters() {
@@ -879,6 +846,15 @@ function start() {
             updateData(input.idPass, { location: a.target.value, })
             start()
         })
+        let queue = document.createElement('div')
+        let queueInput = document.createElement('input')
+        queueInput.value = input.queue
+        queueInput.addEventListener('change', function (a) {
+            input.location = a.target.value
+            updateData(input.idPass, { queue: a.target.value, })
+            start()
+        })
+        queueInput.setAttribute('maxlength', '2')
         let ulLocal = document.createElement('ul')
         // Creat Notes
         var bottomTab = document.createElement('div')
@@ -935,6 +911,7 @@ function start() {
                     tillTime: '',
                     location: '',
                     bottomTabText: '',
+                    queue: '',
                     notesImportant: true,
                 })
                 listenToData()
@@ -944,26 +921,26 @@ function start() {
         // Сохраняем что он сейчас действует или нет 
         let openTrueORFalse = false
         // Тут мы следим за тем если мышь зашла 
-        bottomTabImportant.addEventListener('mousemove', (e) => {
-            menuMousemove.style.display = 'block'
-            openTrueORFalse = true
-        });
-        // Тут мы следим за тем если мышь вышла 
-        bottomTabImportant.addEventListener('mouseleave', () => {
-            openTrueORFalse = false
-            setTimeout(() => {
-                if (!openTrueORFalse) {
-                    menuMousemove.style.display = 'none'
-                }
-            }, 80);
-        });
+        // bottomTabImportant.addEventListener('mousemove', (e) => {
+        //     menuMousemove.style.display = 'block'
+        //     openTrueORFalse = true
+        // });
+        // // Тут мы следим за тем если мышь вышла 
+        // bottomTabImportant.addEventListener('mouseleave', () => {
+        //     openTrueORFalse = false
+        //     setTimeout(() => {
+        //         if (!openTrueORFalse) {
+        //             menuMousemove.style.display = 'none'
+        //         }
+        //     }, 80);
+        // });
         // Прочее
-        menuMousemove.addEventListener('mousemove', (e) => {
-            openTrueORFalse = true
-        });
-        menuMousemove.addEventListener('mouseleave', () => {
-            menuMousemove.style.display = 'none'
-        });
+        // menuMousemove.addEventListener('mousemove', (e) => {
+        //     openTrueORFalse = true
+        // });
+        // menuMousemove.addEventListener('mouseleave', () => {
+        //     menuMousemove.style.display = 'none'
+        // });
         if (input.notesImportant) {
             bottomTabImportant.classList.remove('bottomTabImportantFalse')
             bottomTab.classList.remove('bottomTabTextFalse')
@@ -979,6 +956,7 @@ function start() {
         fromTime.classList.add('from-time', 'tab-section')
         tillTime.classList.add('till-time', 'tab-section')
         location.classList.add('location', 'tab-section')
+        queue.classList.add('queue', 'tab-section')
         bottomTab.classList.add('bottom-tab')
         bottomTabImportant.classList.add('bottomTabImportant')
         menuMousemove.classList.add('menuMousemove')
@@ -997,10 +975,11 @@ function start() {
         tab.append(tabGeneral, bottomTab, ulLocal)
         bottomTab.append(bottomTabText, bottomTabImportant, menuMousemove)
         menuMousemove.append(menuMousemoveSetting, menuMousemoveGeneralDelet)
-        tabGeneral.append(id, name, statusAnd, fromTime, tillTime,LongIsland, location, )
+        tabGeneral.append(id, name, statusAnd, fromTime, tillTime, LongIsland, location, queue)
         fromTime.append(fromInput)
         tillTime.append(tillInput)
         location.append(localInput)
+        queue.append(queueInput)
         statusAnd.append(options1, options8, options2, options3, options4, options5, options6, options7,)
         localInput.addEventListener("input", async function () {
             const query = localInput.value.trim();
@@ -1227,6 +1206,7 @@ creatss.onclick = (() => {
         creatss.innerHTML = '<'
     }
 })
+
 nameCreat.addEventListener('click', async () => {
     creatDiv.style.left = '-50vh'
     creatOffReady = false
@@ -1405,3 +1385,127 @@ menuBut.onclick = (() => {
         mainBox.style.alignItems = 'flex-end';
     }
 })
+
+
+
+
+// SETTING SETTING SETTING ///////////////// SETTING SETTING SETTING //
+////////////////////////////// SETTING //////////////////////////////
+// SETTING SETTING SETTING ///////////////// SETTING SETTING SETTING //
+let GeneralBody = document.querySelector('body')
+let AsideScroll = document.querySelector('.aside-scroll')
+let FilterBox = document.querySelector('.FilterBox')
+let SettingPosition = document.querySelector('.setting-position')
+let FilterCheckBox = document.querySelectorAll('.custom-checkbox')
+let SettingDesign = document.querySelector('.setting-design')
+
+let setting = {
+    filters: 'outside',
+}
+
+// ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ //
+let filterOnOff = {
+    centerFilter: true,
+    mainCenter: true,
+}
+let centerFilter = document.querySelector('.center-filter')
+let mainAnim = document.querySelector('main')
+let mainCenter = document.querySelector('.main-center')
+
+let CenterFilterAnim = document.querySelector('.center-filter-anim')
+
+CenterFilterAnim.onclick = (() => {
+    if (setting.filters == 'outsde') {
+        if (filterOnOff.centerFilter) {
+            filterOnOff.centerFilter = false
+            centerFilter.style.top = '7vh'
+            mainAnim.style.top = '15vh'
+            mainAnim.style.height = '84vh'
+            CenterFilterAnim.style.top = '12vh'
+            CenterFilterAnim.innerHTML = '▲'
+        } else if (filterOnOff.centerFilter == false && filterOnOff.mainCenter == true) {
+            filterOnOff.mainCenter = false
+            mainCenter.style.top = '2vh'
+            centerFilter.style.top = '2vh'
+            mainAnim.style.top = '10vh'
+            CenterFilterAnim.style.top = '7vh'
+            CenterFilterAnim.innerHTML = '▼'
+            mainAnim.style.height = '89vh'
+        } else {
+            filterOnOff.centerFilter = true
+            filterOnOff.mainCenter = true
+            mainCenter.style.top = '7vh'
+            centerFilter.style.top = '12vh'
+            mainAnim.style.top = '20vh'
+            CenterFilterAnim.style.top = '17vh'
+            CenterFilterAnim.innerHTML = '▲'
+            mainAnim.style.height = '80vh'
+        }
+    } else {
+        if (filterOnOff.centerFilter == false && filterOnOff.mainCenter == true) {
+            filterOnOff.mainCenter = false
+            mainCenter.style.top = '2vh'
+            centerFilter.style.top = '2vh'
+            mainAnim.style.top = '10vh'
+            CenterFilterAnim.style.top = '7vh'
+            CenterFilterAnim.innerHTML = '▼'
+            mainAnim.style.height = '89vh'
+        } else {
+            filterOnOff.centerFilter = false
+            filterOnOff.mainCenter = true
+            mainCenter.style.top = '7vh'
+            centerFilter.style.top = '7vh'
+            mainAnim.style.top = '15vh'
+            CenterFilterAnim.style.top = '12vh'
+            CenterFilterAnim.innerHTML = '▲'
+            mainAnim.style.height = '84vh'
+        }
+    }
+})
+// ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ //
+
+function settings() {
+    // filters //
+    if (setting.filters == 'outside') {
+        GeneralBody.append(FilterBox)
+        FilterBox.classList.add('center-filter')
+        FilterBox.classList.remove('center-filter2')
+        FilterCheckBox.forEach(element => {
+            element.classList.remove('checkbox-setting-position')
+            element.classList.add('custom-checkbox')
+        });
+        filterOnOff.centerFilter = true
+        filterOnOff.mainCenter = true
+        mainCenter.style.top = '7vh'
+        centerFilter.style.top = '12vh'
+        mainAnim.style.top = '20vh'
+        CenterFilterAnim.style.top = '17vh'
+        CenterFilterAnim.innerHTML = '▲'
+        mainAnim.style.height = '80vh'
+    } else {
+        AsideScroll.append(FilterBox, SettingPosition, SettingDesign)
+        FilterBox.classList.add('center-filter2')
+        FilterBox.classList.remove('center-filter')
+        FilterCheckBox.forEach(element => {
+            element.classList.add('checkbox-setting-position')
+            element.classList.remove('custom-checkbox')
+        });
+        filterOnOff.centerFilter = false
+        centerFilter.style.top = '7vh'
+        mainAnim.style.top = '15vh'
+        mainAnim.style.height = '84vh'
+        CenterFilterAnim.style.top = '12vh'
+        CenterFilterAnim.innerHTML = '▲'
+    }
+    // filters esc //
+}
+
+settings()
+
+document.querySelectorAll('input[name="filters"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+        console.log(`Выбрано: ${radio.value}`);
+        setting.filters = radio.value
+        settings()
+    });
+});
