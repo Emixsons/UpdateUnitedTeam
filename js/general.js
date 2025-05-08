@@ -866,7 +866,7 @@ function start() {
         queueInput.setAttribute('maxlength', '2')
         if (input.queueColor == '') {
             queueInput.style.backgroundColor = '#7b969b'
-        }else {
+        } else {
             queueInput.style.backgroundColor = input.queueColor
         }
 
@@ -1534,11 +1534,29 @@ let FilterBox = document.querySelector('.FilterBox')
 let SettingPosition = document.querySelector('.setting-position')
 let FilterCheckBox = document.querySelectorAll('.custom-checkbox')
 let SettingDesign = document.querySelector('.setting-design')
+let SettingTheme = document.querySelector('.setting-theme')
 
 let setting = {
     filters: 'outside',
+    theme: 'Classic',
+}
+function syncSettings(withSave = false) {
+    const key = 'myAppSettings';
+
+    if (withSave) {
+        // Сохраняем в localStorage
+        localStorage.setItem(key, JSON.stringify(setting));
+    } else {
+        // Загружаем из localStorage, если есть
+        const stored = localStorage.getItem(key);
+        if (stored) {
+            setting = JSON.parse(stored);
+        }
+    }
+
 }
 
+syncSettings();
 // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ //
 let filterOnOff = {
     centerFilter: true,
@@ -1600,7 +1618,7 @@ CenterFilterAnim.onclick = (() => {
 })
 // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ //
 
-function settings() {
+function settings(rId) {
     // filters //
     if (setting.filters == 'outside') {
         GeneralBody.append(FilterBox)
@@ -1619,7 +1637,7 @@ function settings() {
         CenterFilterAnim.innerHTML = '▲'
         mainAnim.style.height = '80vh'
     } else {
-        AsideScroll.append(FilterBox, SettingPosition, SettingDesign)
+        AsideScroll.append(FilterBox, SettingPosition, SettingDesign, SettingTheme)
         FilterBox.classList.add('center-filter2')
         FilterBox.classList.remove('center-filter')
         FilterCheckBox.forEach(element => {
@@ -1633,15 +1651,112 @@ function settings() {
         CenterFilterAnim.style.top = '12vh'
         CenterFilterAnim.innerHTML = '▲'
     }
+    document.querySelectorAll('input[name="filters"]').forEach((radio, rId2) => {
+        if (radio.value == setting.filters) {
+            radio.checked = true;
+        }
+    });
+    syncSettings(true);
     // filters esc //
 }
 
 settings()
 
-document.querySelectorAll('input[name="filters"]').forEach(radio => {
+document.querySelectorAll('input[name="filters"]').forEach((radio, rId) => {
+    // radio.checked = false;
     radio.addEventListener('change', () => {
         console.log(`Выбрано: ${radio.value}`);
         setting.filters = radio.value
+        console.log(rId);
+        // radio.checked = true;
+
         settings()
     });
 });
+
+function themeSetting() {
+    if (setting.theme == 'Classic') {
+        document.documentElement.style.setProperty('--header', '#002e36');
+        document.documentElement.style.setProperty('--center-filter', '#002e361f');
+        document.documentElement.style.setProperty('--center-filter-anim', '#002e363d');
+        document.documentElement.style.setProperty('--center-filter-anim-hover', '#002e368c');
+        document.documentElement.style.setProperty('--custom-checkbox', '#002e36dc');
+        document.documentElement.style.setProperty('--but-main-canter-hover', '#004f6c');
+        document.documentElement.style.setProperty('--but-main-canter', '#0085b3');
+        document.documentElement.style.setProperty('--aside', '#00272e');
+        document.documentElement.style.setProperty('--theme', '#00252c');
+        document.documentElement.style.setProperty('--theme-box', '#002229');
+        document.documentElement.style.setProperty('--light-gray', '#7c7c7c');
+        document.documentElement.style.setProperty('--drag-gray', '#2b2a2a');
+        document.documentElement.style.setProperty('--main', '#f8f8f8');
+        document.documentElement.style.setProperty('--tab', '#ffffff');
+        document.documentElement.style.setProperty('--tab-local', '#f2f2f2');
+        document.documentElement.style.setProperty('--tab-border', '#ccd5de');
+        document.documentElement.style.setProperty('--tab-bottom', '#e6e6e6');
+        document.documentElement.style.setProperty('--bottom-border-Important', '#808080');
+        document.documentElement.style.setProperty('--white-black', '#000000');
+    } else if (setting.theme == 'Dark') {
+        document.documentElement.style.setProperty('--header', '#1b1b1b');
+        document.documentElement.style.setProperty('--center-filter', '#3f3f3f1f');
+        document.documentElement.style.setProperty('--center-filter-anim', '#2727273d');
+        document.documentElement.style.setProperty('--center-filter-anim-hover', '#3131318c');
+        document.documentElement.style.setProperty('--custom-checkbox', '#242424dc');
+        document.documentElement.style.setProperty('--but-main-canter-hover', '#004f6c');
+        document.documentElement.style.setProperty('--but-main-canter', '#0085b3');
+        document.documentElement.style.setProperty('--aside', '#2b2b2b');
+        document.documentElement.style.setProperty('--theme', '#1a1a1a');
+        document.documentElement.style.setProperty('--theme-box', '#1b1b1b');
+        document.documentElement.style.setProperty('--light-gray', '#bebebe');
+        document.documentElement.style.setProperty('--drag-gray', '#ffffff');
+        document.documentElement.style.setProperty('--main', '#707070');
+        document.documentElement.style.setProperty('--tab', '#1f1f1f');
+        document.documentElement.style.setProperty('--tab-local', '#181818');
+        document.documentElement.style.setProperty('--tab-border', '#1b1b1b');
+        document.documentElement.style.setProperty('--tab-bottom', '#3d3c3c');
+        document.documentElement.style.setProperty('--bottom-border-Important', '#808080');
+        document.documentElement.style.setProperty('--white-black', '#a1a1a1');
+    }
+}
+
+let themeBoxH = document.querySelectorAll('.theme-box h3')
+let themeBoxS = document.querySelectorAll('.theme-box span')
+
+function spanChang(id) {
+    themeBoxH = document.querySelectorAll('.theme-box h3')
+    themeBoxS = document.querySelectorAll('.theme-box span')
+    themeBoxS.forEach((element) => {
+        element.innerHTML = ''
+    });
+    themeBoxS.forEach((element, ids) => {
+        if (id == ids) {
+            console.log(id, ids);
+            element.innerHTML = '✔'
+        }
+    });
+}
+
+function h3S() {
+    themeBoxH.forEach((element, id) => {
+        if (setting.theme == element.innerHTML.split('<')[0].trim()) {
+            spanChang(id)
+        }
+    });
+}
+h3S()
+function h3Chang(id) {
+    setting.theme = themeBoxH[id].textContent.trim();
+    h3S();
+    themeSetting();
+    syncSettings(true); // сохраняем
+}
+
+
+let themeBox = document.querySelectorAll('.theme-box')
+
+themeBox.forEach((box, id) => {
+    box.addEventListener('click', () => {
+        h3Chang(id);
+    });
+});
+
+themeSetting()
