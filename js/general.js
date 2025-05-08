@@ -384,6 +384,7 @@ async function saveData(name, company) {
         company: company,
         LongIsland: true,
         queue: '',
+        queueColor: '',
     }; // таблица ключей для сохранения в базу данных 
     try {
         const docRef = doc(collection(db, "masiv"));
@@ -423,6 +424,7 @@ function listenToData() {
                     company: doc.data().company,
                     LongIsland: doc.data().LongIsland,
                     queue: doc.data().queue,
+                    queueColor: doc.data().queueColor,
                 },) // кидает в масив для фильтрации
             }
             generalMasiv.push({
@@ -438,6 +440,7 @@ function listenToData() {
                 company: doc.data().company,
                 LongIsland: doc.data().LongIsland,
                 queue: doc.data().queue,
+                queueColor: doc.data().queueColor,
             },) // нужен для удаления компаний с их нимим драйверами
         });
         startFilter(); // вызываем перерисовку сайта
@@ -713,6 +716,10 @@ document.addEventListener("DOMContentLoaded", () => {
 let draggedEl = null;
 let draggedIndex = null;
 
+
+
+
+let colorQueue = ['rgba(255, 0, 0, 0.534)', 'rgba(255, 145, 0, 0.534)', 'rgba(10, 124, 0, 0.534)', 'rgba(0, 12, 124, 0.534)', 'rgba(124, 0, 103, 0.534)']
 ////////////////////////////////////////////// СОЗДАНИЯ ЯЧЕЕК ТАБЛИЦЫ //////////////////////////////////////////////
 ////////////////////////////////////////////// СОЗДАНИЯ ЯЧЕЕК ТАБЛИЦЫ //////////////////////////////////////////////
 ////////////////////////////////////////////// СОЗДАНИЯ ЯЧЕЕК ТАБЛИЦЫ //////////////////////////////////////////////
@@ -846,6 +853,8 @@ function start() {
             updateData(input.idPass, { location: a.target.value, })
             start()
         })
+        // Queue // Queue // Queue // Queue //
+
         let queue = document.createElement('div')
         let queueInput = document.createElement('input')
         queueInput.value = input.queue
@@ -855,6 +864,21 @@ function start() {
             start()
         })
         queueInput.setAttribute('maxlength', '2')
+        if (input.queueColor == '') {
+            queueInput.style.backgroundColor = '#7b969b'
+        }else {
+            queueInput.style.backgroundColor = input.queueColor
+        }
+
+        let QueueLeft = document.createElement('div')
+        let QueueLeftBox1 = document.createElement('div')
+        let QueueLeftBox2 = document.createElement('div')
+        let QueueLeftBox3 = document.createElement('div')
+        let QueueLeftBox4 = document.createElement('div')
+        let QueueLeftBox5 = document.createElement('div')
+        let QueueLeftClear = document.createElement('div')
+
+        // Queue // Queue // Queue // Queue //
         let ulLocal = document.createElement('ul')
         // Creat Notes
         var bottomTab = document.createElement('div')
@@ -964,6 +988,13 @@ function start() {
         menuMousemoveGeneralDelet.classList.add('menuMousemoveGeneralDelet')
         ulLocal.classList.add('autocomplete-list')
         LongIsland.classList.add('LongIsland')
+        QueueLeft.classList.add('QueueLeft')
+        QueueLeftBox1.classList.add('QueueLeftBox1', 'QueueLeftBox')
+        QueueLeftBox2.classList.add('QueueLeftBox2', 'QueueLeftBox')
+        QueueLeftBox3.classList.add('QueueLeftBox3', 'QueueLeftBox')
+        QueueLeftBox4.classList.add('QueueLeftBox4', 'QueueLeftBox')
+        QueueLeftBox5.classList.add('QueueLeftBox5', 'QueueLeftBox')
+        QueueLeftClear.classList.add('QueueLeftClear', 'QueueLeftBox')
         if (input.LongIsland) {
             LongIsland.classList.add('Ready')
         } else {
@@ -979,7 +1010,8 @@ function start() {
         fromTime.append(fromInput)
         tillTime.append(tillInput)
         location.append(localInput)
-        queue.append(queueInput)
+        queue.append(queueInput, QueueLeft)
+        QueueLeft.append(QueueLeftBox1, QueueLeftBox2, QueueLeftBox3, QueueLeftBox4, QueueLeftBox5, QueueLeftClear)
         statusAnd.append(options1, options8, options2, options3, options4, options5, options6, options7,)
         localInput.addEventListener("input", async function () {
             const query = localInput.value.trim();
@@ -1105,6 +1137,110 @@ function start() {
         LongIsland.addEventListener('touchend', () => {
             clearTimeout(holdTimer);
         });
+
+        let stylesQueueLeft = getComputedStyle(QueueLeft);
+        let widthQueueLeft = parseFloat(stylesQueueLeft.width); // получаем ширину
+        let leftQueueLeft = parseFloat(stylesQueueLeft.left);   // получаем позицию слева
+        // let QueueLeftBox = document.querySelectorAll('.QueueLeftBox')
+
+        // console.log('Width:', widthQueueLeft, 'Left:', leftQueueLeft);
+
+        // Пример проверки — открыть/закрыть меню
+
+        const animationDuration2 = 500;
+
+        function QueueLeftBut() {
+            stylesQueueLeft = getComputedStyle(QueueLeft);
+            widthQueueLeft = parseFloat(stylesQueueLeft.width);
+            leftQueueLeft = parseFloat(stylesQueueLeft.left);
+
+            if (widthQueueLeft == 20 || leftQueueLeft == 5) {
+                console.log("Меню закрыто - открыто");
+                QueueLeft.style.left = '-150px'
+                QueueLeft.style.width = '150px'
+                // открыть меню
+            } else {
+                console.log("Меню открыто - закрыто");
+                QueueLeft.style.left = '5px'
+                QueueLeft.style.width = '20px'
+                // закрыть меню
+            }
+        }
+
+        queueInput.addEventListener('mousedown', () => {
+            holdTimer = setTimeout(() => {
+                QueueLeftBut();
+            }, animationDuration2);
+        });
+
+        queueInput.addEventListener('mouseup', () => {
+            clearTimeout(holdTimer); // Если отпустил раньше — сброс
+        });
+
+        queueInput.addEventListener('mouseleave', () => {
+            clearTimeout(holdTimer); // Если ушёл курсором — сброс
+        });
+
+        // Для мобильных:
+        queueInput.addEventListener('touchstart', () => {
+            holdTimer = setTimeout(() => {
+                QueueLeftBut();
+            }, animationDuration2);
+        });
+
+        queueInput.addEventListener('touchend', () => {
+            clearTimeout(holdTimer);
+        });
+
+
+        QueueLeftBox1.onclick = (() => {
+            updateData(input.idPass, { queueColor: '#ff7777', })
+            // start()
+        })
+        QueueLeftBox2.onclick = (() => {
+            updateData(input.idPass, { queueColor: '#ffc477', })
+            // start()
+        })
+        QueueLeftBox3.onclick = (() => {
+            updateData(input.idPass, { queueColor: '#7cb977', })
+            // start()
+        })
+        QueueLeftBox4.onclick = (() => {
+            updateData(input.idPass, { queueColor: '#777db9', })
+            // start()
+        })
+        QueueLeftBox5.onclick = (() => {
+            updateData(input.idPass, { queueColor: '#b977ae', })
+            // start()
+        })
+        QueueLeftClear.onclick = (() => {
+            updateData(input.idPass, { queueColor: '', })
+            // start()
+        })
+
+
+
+
+
+        // QueueLeft.onclick = (() => {
+        //     // Назначаем обработчики только один раз
+        //     const QueueLeftBox = document.querySelectorAll('.QueueLeftBox');
+        //     QueueLeftBox.forEach((element, id) => {
+        //         // Привязываем обработчик клика для каждого элемента
+        //         element.onclick = (() => {
+        //             // console.log(id);
+        //             const bgColor = getComputedStyle(element).backgroundColor;
+        //             updateData(input.idPass, { queueColor: bgColor, })
+        //             start()
+        //             // queueInput.style.backgroundColor = bgColor;
+        //             // console.log(input.name);
+        //         });
+        //     });
+
+        //     // Вызов функции, если необходимо
+        //     QueueLeftBut();
+        // });
+
         /////////////// -------------------------------------- ///////////////
     });
 

@@ -658,17 +658,92 @@ body.drag-cursor-grab {
     /* margin-right: 20px; */
 }
 
-.queue input{
+.queue {
+    position: relative;
+    z-index: 100;
+}
+
+.queue input {
     width: 30px;
     height: 100%;
     border: 0;
+    border-radius: 5px 1px 0 5px;
     outline: none;
-    background-color: #002e36c9;
+    /* background-color: rgba(0, 46, 54, 0.521); */
+    /* background-color: #7b969b; */
     /* padding-left: 10px;
     padding-right: 10px; */
     font-size: 18px;
     text-align: center;
     color: white;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.QueueLeft {
+    /* width: 150px; */
+    width: 20px;
+    height: 100%;
+    background-color: #002e36;
+    /* align-items: center; */
+    /* border: 1px solid #00252c; */
+    position: absolute;
+    /* left: -150px; */
+    left: 5px;
+    display: flex;
+    gap: 1px;
+    z-index: 1;
+    transition: 300ms ease;
+}
+
+.QueueLeftBox {
+    width: 23px;
+    height: 22px;
+    margin-top: 1.5px;
+    margin-left: 1px;
+    background-color: #00252c;
+    cursor: pointer;
+}
+
+.QueueLeftBox1 {
+    background-color: #ff7777;
+}
+
+.QueueLeftBox2 {
+    background-color: #ffc477;
+}
+
+.QueueLeftBox3 {
+    background-color: #7cb977;
+}
+
+.QueueLeftBox4 {
+    background-color: #777db9;
+}
+
+.QueueLeftBox5 {
+    background-color: #b977ae;
+}
+
+.QueueLeftClear {
+    position: relative;
+    background-color: white;
+    overflow: hidden;
+    border: 1px solid rgb(158, 158, 158);
+}
+
+.QueueLeftClear::before {
+    content: "";
+    position: absolute;
+    width: 150%;
+    /* шире, чтобы гарантированно покрыть диагональ */
+    height: 4px;
+    /* толщина линии */
+    background-color: red;
+    bottom: 0;
+    left: 1px;
+    transform: rotate(-45deg);
+    transform-origin: bottom left;
 }
 
 .price {
@@ -1112,7 +1187,8 @@ input[type="range"]::-webkit-slider-thumb {
     appearance: none;
     width: 1.5vh;
     height: 1.5vh;
-    background-color: rgb(230, 230, 230);;
+    background-color: rgb(230, 230, 230);
+    ;
     border-radius: 50%;
     /* border: 0.2vh solid white; */
     box-shadow: 0 0 0.5vh rgba(0, 0, 0, 0.3);
