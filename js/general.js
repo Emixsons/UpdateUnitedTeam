@@ -145,7 +145,6 @@ function listenToDataCompany() {
         }
         CompanyMenuCreat()  // вызываем перерисовку сайта
         startFilterC()
-        ChangeCompanyHistori()
     });
 }
 /////////////////////// ---------------- ///////////////////////
@@ -1766,32 +1765,6 @@ let companyHistori = []
 let historyMassiv = JSON.parse(localStorage.getItem('historyMassiv')) || [];
 let textHistary = document.querySelector('.text-histary')
 
-function CreatHistary() {
-
-    textHistary.innerHTML = ''
-    companyHistori.forEach(lil => {
-        historyMassivTab[0].data.forEach(element => {
-            if (lil.name == element.company && lil.statuse) {
-                textHistary.innerHTML += `
-                <div class="block-history">
-                <h4>Company: <span>${element.company}</span></h4>
-                <h5>Name: <span>${element.name}</span></h5>
-                <h5>Status: <span>${element.statusAnd}</span></h5>
-                <h5>From Time: <span>${element.fromTime}</span></h5>
-                <h5>Till Time: <span>${element.tillTime}</span></h5>
-                <h5>Long Island: <span>${element.LongIsland}</span></h5>
-                <h5>Local: <span>${element.location}</span></h5>
-                <h5>Queue: <span>${element.queue}</span></h5>
-                <h5 class="notesHistary">Notes: <span>${element.bottomTabText}</span></h5>
-                <br>
-                <hr>
-                </div>
-                `
-            }
-        });
-    });
-}
-
 function saveToHistory() {
     const now = new Date();
     const formatted = now.toLocaleString();
@@ -1804,133 +1777,138 @@ function saveToHistory() {
     });
 
     // Удаляем записи старше 24 часов (86400000 мс)
-    historyMassiv = historyMassiv.filter(entry => now - entry.timestamp <= 86400000);
 
-    // Сохраняем в localStorage
     localStorage.setItem('historyMassiv', JSON.stringify(historyMassiv));
-    console.log(historyMassiv);
+}
+
+function cleanOldHistory() {
+    const now = Date.now();
+    historyMassiv = historyMassiv.filter(entry => now - entry.timestamp <= 36000000);
+    localStorage.setItem('historyMassiv', JSON.stringify(historyMassiv));
 
 }
 
 // Запускаем каждые 5 минут
 setInterval(saveToHistory, 1 * 60 * 1000);
 
-const dateInput = document.querySelector('.data-time-histary input[type="date"]');
-const timeInput = document.querySelector('.data-time-histary input[type="time"]');
+const dateInputs = document.querySelectorAll('.data-time-histary input[type="date"]');
+const timeInputs = document.querySelectorAll('.data-time-histary input[type="time"]');
+const nameInput = document.querySelector('.data-time-histary .name-filter');
+// const textHistary = document.querySelector('.text-histary');
+
+const dateFromInput = dateInputs[0];
+const dateToInput = dateInputs[1];
+const timeFromInput = timeInputs[0];
+const timeToInput = timeInputs[1];
+
+// let historyMassivTab = [];
 
 function pad(n) {
     return n.toString().padStart(2, '0');
 }
 
-// Установка текущей даты и времени
 function setCurrentDateTimeInputs() {
     const now = new Date();
-    const dateStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
-    const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes() - 2)}`;
+    const earlier = new Date(now.getTime() - 5 * 60 * 1000);
 
-    dateInput.value = dateStr;
-    timeInput.value = timeStr;
+    const formatDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const formatTime = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+
+    dateFromInput.value = formatDate(earlier);
+    dateToInput.value = formatDate(now);
+    timeFromInput.value = formatTime(earlier);
+    timeToInput.value = formatTime(now);
 }
 
-// Поиск по времени и установка в historyMassivTab
-function searchHistoryByDateTime() {
-    const date = dateInput.value;
-    const time = timeInput.value;
+function searchHistoryByDateTimeAndName() {
+    const fromDate = dateFromInput.value;
+    const toDate = dateToInput.value;
+    const fromTime = timeFromInput.value;
+    const toTime = timeToInput.value;
+    const nameFilter = nameInput.value.trim().toLowerCase();
 
-    if (!date || !time) return;
+    if (!fromDate || !toDate || !fromTime || !toTime) return;
 
-    const selectedTimestamp = new Date(`${date}T${time}`).getTime();
+    const fromTimestamp = new Date(`${fromDate}T${fromTime}`).getTime();
+    const toTimestamp = new Date(`${toDate}T${toTime}`).getTime();
 
-    const match = historyMassiv.find(entry => {
-        // Сравниваем с погрешностью ±1 минута (60000 мс), можешь убрать если нужно точное совпадение
-        return Math.abs(entry.timestamp - selectedTimestamp) < 60000;
+    const matches = historyMassiv.filter(entry => {
+        return entry.timestamp >= fromTimestamp && entry.timestamp <= toTimestamp;
     });
 
-    if (match) {
-        historyMassivTab = [match]; // Сохраняем один объект в массив
-        CreatHistary()
-    } else {
-        historyMassivTab = [];
-    }
-}
+    historyMassivTab = [];
 
-// Слушаем изменения
-dateInput.addEventListener('change', searchHistoryByDateTime);
-timeInput.addEventListener('change', searchHistoryByDateTime);
+    matches.forEach(entry => {
+        const filteredData = entry.data.filter(el => {
+            if (nameFilter.length < 2) return true; // не фильтруем по имени, если менее 2 символов
+            return el.name.toLowerCase().includes(nameFilter);
+        });
 
-// Запускаем при старте
-setCurrentDateTimeInputs();
-searchHistoryByDateTime();
-
-
-
-function ChangeCompanyHistori() {
-    companyHistori = []
-    company.forEach(kek => {
-        companyHistori.push({
-            name: kek.name,
-            statuse: true,
-        },)
-    });
-
-    getInitialCheckboxData()
-}
-
-
-function getInitialCheckboxData() {
-
-    const data = JSON.parse(localStorage.getItem('companyHistori'));
-    if (data && !data == [] && data.length == company.length) {
-        companyHistori = data
-        setCompanyHistori()
-    } else {
-        localStorage.setItem('companyHistori', JSON.stringify(companyHistori));
-        setCompanyHistori()
-    }
-}
-
-
-function setCompanyHistori() {
-    historyCheckbox.innerHTML = ''
-
-    companyHistori.forEach(kek => {
-        if (kek.statuse) {
-
-            historyCheckbox.innerHTML += `
-               <label class="checkbox-company">
-                    <input type="checkbox" class="checkbox-input" data-name="${kek.name}" checked/>
-                    ${kek.name}       
-                </label>
-            `
-        } else {
-            historyCheckbox.innerHTML += `
-               <label class="checkbox-company">
-                    <input type="checkbox" class="checkbox-input" data-name="${kek.name}"/>
-                    ${kek.name}         
-                </label>
-            `
+        if (filteredData.length > 0) {
+            historyMassivTab.push({
+                datetime: entry.datetime,
+                timestamp: entry.timestamp, // добавляем для сортировки
+                data: filteredData
+            });
         }
     });
 
-    // Отслеживание действий
-    document.querySelectorAll('.checkbox-input').forEach(input => {
-        input.addEventListener('change', () => {
-            const name = input.getAttribute('data-name');
-            const status = input.checked;
-
-            // Обновляем companyHistori
-            companyHistori = companyHistori.map(el => {
-                if (el.name === name) {
-                    return { ...el, statuse: status };
-                }
-                return el;
-            });
-
-            // Сохраняем в localStorage
-            localStorage.setItem('companyHistori', JSON.stringify(companyHistori));
-            CreatHistary()
-            // Для отладки:
-        });
-    });
+    CreatHistary();
 }
 
+function CreatHistary() {
+    historyMassivTab.sort((b, a) => a.timestamp - b.timestamp);
+    textHistary.innerHTML = '';
+
+    let queryPost = 0
+
+    if (historyMassivTab.length === 0) {
+        textHistary.innerHTML = '<p>No matching entries found.</p>';
+        return;
+    }
+
+    historyMassivTab.forEach(history => {
+        // Выводим дату/время сохранения
+        // textHistary.innerHTML += ``;
+        history.data.forEach(element => {
+            if (queryPost < 30) {
+                textHistary.innerHTML += `
+                <div class="block-history">
+                <h5 class="history-timestamp">Saved at: <span>${history.datetime}</span></h5>
+                <h4>Company: <span>${element.company}</span></h4>
+                <h5>Name: <span>${element.name}</span></h5>
+                <h5>Status: <span>${element.statusAnd}</span></h5>
+                <h5>From Time: <span>${element.fromTime}</span></h5>
+                <h5>Till Time: <span>${element.tillTime}</span></h5>
+                <h5>Long Island: <span>${element.LongIsland}</span></h5>
+                <h5>Local: <span>${element.location}</span></h5>
+                <h5>Queue: <span>${element.queue}</span></h5>
+                <h5 class="notesHistary">Notes: <span>${element.bottomTabText}</span></h5>
+                <br><hr>
+                </div>
+                `;
+                queryPost += 1
+            }
+        });
+    });
+
+}
+
+// Слушатели
+[
+    dateFromInput,
+    dateToInput,
+    timeFromInput,
+    timeToInput,
+    nameInput
+].forEach(input => {
+    input.addEventListener('input', searchHistoryByDateTimeAndName);
+});
+
+// Старт
+setCurrentDateTimeInputs();
+searchHistoryByDateTimeAndName();
+cleanOldHistory()
+window.addEventListener('load', () => {
+  cleanOldHistory();
+});
