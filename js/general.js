@@ -1,5 +1,5 @@
 let mainTab = document.querySelector('.main-tab')
-
+localStorage.removeItem('historyMassiv');
 // let timeString
 // function updateClock() {
 //     let now = new Date();
