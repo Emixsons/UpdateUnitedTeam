@@ -1762,7 +1762,7 @@ let historyCheckbox = document.querySelector('.history-checkbox')
 let historyMassivTab = []
 let companyHistori = []
 
-let historyMassiv = JSON.parse(localStorage.getItem('historyMassiv')) || [];
+let historyMassiv = JSON.parse(localStorage.getItem('historyMassiv2')) || [];
 let textHistary = document.querySelector('.text-histary')
 
 function saveToHistory() {
@@ -1778,13 +1778,13 @@ function saveToHistory() {
 
     // Удаляем записи старше 24 часов (86400000 мс)
 
-    localStorage.setItem('historyMassiv', JSON.stringify(historyMassiv));
+    localStorage.setItem('historyMassiv2', JSON.stringify(historyMassiv));
 }
 
 function cleanOldHistory() {
     const now = Date.now();
     historyMassiv = historyMassiv.filter(entry => now - entry.timestamp <= 36000000);
-    localStorage.setItem('historyMassiv', JSON.stringify(historyMassiv));
+    localStorage.setItem('historyMassiv2', JSON.stringify(historyMassiv));
 
 }
 
