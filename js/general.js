@@ -145,6 +145,7 @@ function listenToDataCompany() {
         }
         CompanyMenuCreat()  // вызываем перерисовку сайта
         startFilterC()
+        ChangeCompanyHistori()
     });
 }
 /////////////////////// ---------------- ///////////////////////
@@ -212,6 +213,7 @@ function CompanyMenuCreat() {
         changeColorStatus(parseFloat(slider.value))
         // swap ----------- //
     });
+
     let butMainCanterBut = document.querySelectorAll('.but-main-canter')
     let butMainCanterButH1 = document.querySelectorAll('.but-main-canter h1')
 
@@ -241,7 +243,6 @@ function CompanyMenuCreat() {
             listenToData()
         })
     });
-    console.log(companyFilter);
 }
 
 
@@ -325,8 +326,6 @@ function startFilterC() {
         company.push(init)
         // company.sort((a, b) => a.name.localeCompare(b.name));
     });
-    console.log(company);
-    console.log(companyFilter);
 
     loadFromLocalStorageC();
     CompanyMenuCreat()
@@ -1143,8 +1142,6 @@ function start() {
         let leftQueueLeft = parseFloat(stylesQueueLeft.left);   // получаем позицию слева
         // let QueueLeftBox = document.querySelectorAll('.QueueLeftBox')
 
-        // console.log('Width:', widthQueueLeft, 'Left:', leftQueueLeft);
-
         // Пример проверки — открыть/закрыть меню
 
         const animationDuration2 = 500;
@@ -1155,12 +1152,10 @@ function start() {
             leftQueueLeft = parseFloat(stylesQueueLeft.left);
 
             if (widthQueueLeft == 20 || leftQueueLeft == 5) {
-                console.log("Меню закрыто - открыто");
                 QueueLeft.style.left = '-150px'
                 QueueLeft.style.width = '150px'
                 // открыть меню
             } else {
-                console.log("Меню открыто - закрыто");
                 QueueLeft.style.left = '5px'
                 QueueLeft.style.width = '20px'
                 // закрыть меню
@@ -1179,6 +1174,10 @@ function start() {
 
         queueInput.addEventListener('mouseleave', () => {
             clearTimeout(holdTimer); // Если ушёл курсором — сброс
+        });
+
+        queueInput.addEventListener('dblclick', () => {
+            QueueLeftBut(); // Двойной клик сразу вызывает функцию, без задержки
         });
 
         // Для мобильных:
@@ -1217,9 +1216,11 @@ function start() {
             updateData(input.idPass, { queueColor: '', })
             // start()
         })
+        // let mainsClick = document.querySelector('main')
 
-
-
+        // mainsClick.onclick = (() => {
+        // QueueLeftBut()
+        // })
 
 
         // QueueLeft.onclick = (() => {
@@ -1228,12 +1229,10 @@ function start() {
         //     QueueLeftBox.forEach((element, id) => {
         //         // Привязываем обработчик клика для каждого элемента
         //         element.onclick = (() => {
-        //             // console.log(id);
         //             const bgColor = getComputedStyle(element).backgroundColor;
         //             updateData(input.idPass, { queueColor: bgColor, })
         //             start()
         //             // queueInput.style.backgroundColor = bgColor;
-        //             // console.log(input.name);
         //         });
         //     });
 
@@ -1535,6 +1534,7 @@ let SettingPosition = document.querySelector('.setting-position')
 let FilterCheckBox = document.querySelectorAll('.custom-checkbox')
 let SettingDesign = document.querySelector('.setting-design')
 let SettingTheme = document.querySelector('.setting-theme')
+let SettingHistory = document.querySelector('.setting-history')
 
 let setting = {
     filters: 'outside',
@@ -1569,7 +1569,7 @@ let mainCenter = document.querySelector('.main-center')
 let CenterFilterAnim = document.querySelector('.center-filter-anim')
 
 CenterFilterAnim.onclick = (() => {
-    if (setting.filters == 'outsde') {
+    if (setting.filters == 'outside') {
         if (filterOnOff.centerFilter) {
             filterOnOff.centerFilter = false
             centerFilter.style.top = '7vh'
@@ -1637,7 +1637,7 @@ function settings(rId) {
         CenterFilterAnim.innerHTML = '▲'
         mainAnim.style.height = '80vh'
     } else {
-        AsideScroll.append(FilterBox, SettingPosition, SettingDesign, SettingTheme)
+        AsideScroll.append(FilterBox, SettingPosition, SettingDesign, SettingTheme, SettingHistory)
         FilterBox.classList.add('center-filter2')
         FilterBox.classList.remove('center-filter')
         FilterCheckBox.forEach(element => {
@@ -1665,9 +1665,7 @@ settings()
 document.querySelectorAll('input[name="filters"]').forEach((radio, rId) => {
     // radio.checked = false;
     radio.addEventListener('change', () => {
-        console.log(`Выбрано: ${radio.value}`);
         setting.filters = radio.value
-        console.log(rId);
         // radio.checked = true;
 
         settings()
@@ -1697,10 +1695,10 @@ function themeSetting() {
         document.documentElement.style.setProperty('--white-black', '#000000');
     } else if (setting.theme == 'Dark') {
         document.documentElement.style.setProperty('--header', '#1b1b1b');
-        document.documentElement.style.setProperty('--center-filter', '#3f3f3f1f');
-        document.documentElement.style.setProperty('--center-filter-anim', '#2727273d');
+        document.documentElement.style.setProperty('--center-filter', '#ececec1f');
+        document.documentElement.style.setProperty('--center-filter-anim', '#5e5e5e3d');
         document.documentElement.style.setProperty('--center-filter-anim-hover', '#3131318c');
-        document.documentElement.style.setProperty('--custom-checkbox', '#242424dc');
+        document.documentElement.style.setProperty('--custom-checkbox', '#1b1b1b');
         document.documentElement.style.setProperty('--but-main-canter-hover', '#004f6c');
         document.documentElement.style.setProperty('--but-main-canter', '#0085b3');
         document.documentElement.style.setProperty('--aside', '#2b2b2b');
@@ -1708,10 +1706,10 @@ function themeSetting() {
         document.documentElement.style.setProperty('--theme-box', '#1b1b1b');
         document.documentElement.style.setProperty('--light-gray', '#bebebe');
         document.documentElement.style.setProperty('--drag-gray', '#ffffff');
-        document.documentElement.style.setProperty('--main', '#707070');
+        document.documentElement.style.setProperty('--main', '#222222');
         document.documentElement.style.setProperty('--tab', '#1f1f1f');
         document.documentElement.style.setProperty('--tab-local', '#181818');
-        document.documentElement.style.setProperty('--tab-border', '#1b1b1b');
+        document.documentElement.style.setProperty('--tab-border', '#1b1b1bbd');
         document.documentElement.style.setProperty('--tab-bottom', '#3d3c3c');
         document.documentElement.style.setProperty('--bottom-border-Important', '#808080');
         document.documentElement.style.setProperty('--white-black', '#a1a1a1');
@@ -1729,7 +1727,6 @@ function spanChang(id) {
     });
     themeBoxS.forEach((element, ids) => {
         if (id == ids) {
-            console.log(id, ids);
             element.innerHTML = '✔'
         }
     });
@@ -1760,3 +1757,180 @@ themeBox.forEach((box, id) => {
 });
 
 themeSetting()
+
+let historyCheckbox = document.querySelector('.history-checkbox')
+
+let historyMassivTab = []
+let companyHistori = []
+
+let historyMassiv = JSON.parse(localStorage.getItem('historyMassiv')) || [];
+let textHistary = document.querySelector('.text-histary')
+
+function CreatHistary() {
+
+    textHistary.innerHTML = ''
+    companyHistori.forEach(lil => {
+        historyMassivTab[0].data.forEach(element => {
+            if (lil.name == element.company && lil.statuse) {
+                textHistary.innerHTML += `
+                <div class="block-history">
+                <h4>Company: <span>${element.company}</span></h4>
+                <h5>Name: <span>${element.name}</span></h5>
+                <h5>Status: <span>${element.statusAnd}</span></h5>
+                <h5>From Time: <span>${element.fromTime}</span></h5>
+                <h5>Till Time: <span>${element.tillTime}</span></h5>
+                <h5>Long Island: <span>${element.LongIsland}</span></h5>
+                <h5>Local: <span>${element.location}</span></h5>
+                <h5>Queue: <span>${element.queue}</span></h5>
+                <h5 class="notesHistary">Notes: <span>${element.bottomTabText}</span></h5>
+                <br>
+                <hr>
+                </div>
+                `
+            }
+        });
+    });
+}
+
+function saveToHistory() {
+    const now = new Date();
+    const formatted = now.toLocaleString();
+
+    // Добавляем текущую копию masivfilter с меткой времени
+    historyMassiv.push({
+        timestamp: now.getTime(), // сохраняется для расчёта "24 часа"
+        datetime: now.toLocaleString(), // читаемая дата и время
+        data: [...generalMasiv] // или structuredClone(masivfilter), если вложенные объекты
+    });
+
+    // Удаляем записи старше 24 часов (86400000 мс)
+    historyMassiv = historyMassiv.filter(entry => now - entry.timestamp <= 86400000);
+
+    // Сохраняем в localStorage
+    localStorage.setItem('historyMassiv', JSON.stringify(historyMassiv));
+    console.log(historyMassiv);
+
+}
+
+// Запускаем каждые 5 минут
+setInterval(saveToHistory, 1 * 60 * 1000);
+
+const dateInput = document.querySelector('.data-time-histary input[type="date"]');
+const timeInput = document.querySelector('.data-time-histary input[type="time"]');
+
+function pad(n) {
+    return n.toString().padStart(2, '0');
+}
+
+// Установка текущей даты и времени
+function setCurrentDateTimeInputs() {
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+    const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes() - 2)}`;
+
+    dateInput.value = dateStr;
+    timeInput.value = timeStr;
+}
+
+// Поиск по времени и установка в historyMassivTab
+function searchHistoryByDateTime() {
+    const date = dateInput.value;
+    const time = timeInput.value;
+
+    if (!date || !time) return;
+
+    const selectedTimestamp = new Date(`${date}T${time}`).getTime();
+
+    const match = historyMassiv.find(entry => {
+        // Сравниваем с погрешностью ±1 минута (60000 мс), можешь убрать если нужно точное совпадение
+        return Math.abs(entry.timestamp - selectedTimestamp) < 60000;
+    });
+
+    if (match) {
+        historyMassivTab = [match]; // Сохраняем один объект в массив
+        CreatHistary()
+    } else {
+        historyMassivTab = [];
+    }
+}
+
+// Слушаем изменения
+dateInput.addEventListener('change', searchHistoryByDateTime);
+timeInput.addEventListener('change', searchHistoryByDateTime);
+
+// Запускаем при старте
+setCurrentDateTimeInputs();
+searchHistoryByDateTime();
+
+
+
+function ChangeCompanyHistori() {
+    companyHistori = []
+    company.forEach(kek => {
+        companyHistori.push({
+            name: kek.name,
+            statuse: true,
+        },)
+    });
+
+    getInitialCheckboxData()
+}
+
+
+function getInitialCheckboxData() {
+
+    const data = JSON.parse(localStorage.getItem('companyHistori'));
+    if (data && !data == [] && data.length == company.length) {
+        companyHistori = data
+        setCompanyHistori()
+    } else {
+        localStorage.setItem('companyHistori', JSON.stringify(companyHistori));
+        setCompanyHistori()
+    }
+}
+
+
+function setCompanyHistori() {
+    historyCheckbox.innerHTML = ''
+
+    companyHistori.forEach(kek => {
+        if (kek.statuse) {
+
+            historyCheckbox.innerHTML += `
+               <label class="checkbox-company">
+                    <input type="checkbox" class="checkbox-input" data-name="${kek.name}" checked/>
+                    ${kek.name}       
+                </label>
+            `
+        } else {
+            historyCheckbox.innerHTML += `
+               <label class="checkbox-company">
+                    <input type="checkbox" class="checkbox-input" data-name="${kek.name}"/>
+                    ${kek.name}         
+                </label>
+            `
+        }
+    });
+
+    // Отслеживание действий
+    document.querySelectorAll('.checkbox-input').forEach(input => {
+        input.addEventListener('change', () => {
+            const name = input.getAttribute('data-name');
+            const status = input.checked;
+
+            // Обновляем companyHistori
+            companyHistori = companyHistori.map(el => {
+                if (el.name === name) {
+                    return { ...el, statuse: status };
+                }
+                return el;
+            });
+
+            // Сохраняем в localStorage
+            localStorage.setItem('companyHistori', JSON.stringify(companyHistori));
+            CreatHistary()
+            // Для отладки:
+        });
+    });
+}
+
