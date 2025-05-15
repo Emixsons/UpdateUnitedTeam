@@ -1,19 +1,7 @@
 let mainTab = document.querySelector('.main-tab')
-localStorage.removeItem('historyMassiv');
-// let timeString
-// function updateClock() {
-//     let now = new Date();
-//     let hours = String(now.getHours()).padStart(2, '0');
-//     let minutes = String(now.getMinutes()).padStart(2, '0');
-//     let seconds = String(now.getSeconds()).padStart(2, '0');
-//     timeString = `${hours}:${minutes}:${seconds}`;
-
-// }
-
-// setInterval(updateClock, 60000); // обновлять каждую секунду
-// updateClock();
 
 /////////////////////// хранилище ///////////////////////
+
 let generalMasiv = []
 let masivfilter = []
 let filterReadyReady = []
@@ -27,6 +15,7 @@ let companyTrue = []
 /////////////////////// ---------- ///////////////////////
 
 /////////////////////// обновления часов ///////////////////////
+
 function hasTimePassed(tillTimes) {
     const [targetHours, targetMinutes] = tillTimes.split(':').map(Number);
 
@@ -52,20 +41,18 @@ function updateTillTime() {
         }
     });
 }
-
 setInterval(updateTillTime, 10000); // обновлять каждую секунду
+
 /////////////////////// ---------- ///////////////////////
 
-
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+// →→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→ //
+// →→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→ //
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 /////////////////////// Конфигурация Firebase ///////////////////////
+
 const firebaseConfig = {
     apiKey: "AIzaSyBZNS6meqgFrhKhXBZc3spCMHK9hGvSuZ0",
     authDomain: "tokssaupdate.firebaseapp.com",
@@ -75,12 +62,19 @@ const firebaseConfig = {
     appId: "1:37522886443:web:ffe41cf86d55f902453f6e",
     measurementId: "G-29QKNF40NH"
 };
+
 /////////////////////// ---------- ///////////////////////
 
+
 /////////////////////// Инициализация Firebase ///////////////////////
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
 /////////////////////// ---------- ///////////////////////
+
+// →→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→ //
+// →→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→ //
 
 /////////////////////// Создания новой компании ///////////////////////
 async function saveDataCompany(name) {
@@ -94,17 +88,19 @@ async function saveDataCompany(name) {
         console.error("Ошибка при сохранении данных:", e);
     }
     listenToDataCompany()
-    saveCompanyTrue()
 }
 /////////////////////// ---------- ///////////////////////
 
 /////////////////////// Сохранение в Логальную базу масив Компании ///////////////////////
+
 function saveCompanyTrue() {
-    localStorage.setItem("CompanyTrue", JSON.stringify(companyTrue));
+    localStorage.setItem("CompanyTrue", JSON.stringify(companyFilter));
 }
+
 /////////////////////// ---------- ///////////////////////
 
 /////////////////////// Обнаруживает изменения в базе ///////////////////////
+
 function filterCompanyTrue() {
     if (companyFilter.length === companyTrue.length) {
         companyFilter = companyTrue
@@ -119,9 +115,11 @@ function filterCompanyTrue() {
         localStorage.setItem("CompanyTrue", JSON.stringify(companyFilter));
     }
 }
+
 /////////////////////// ---------- ///////////////////////
 
 /////////////////////// Получение всех компаний ///////////////////////
+
 function listenToDataCompany() {
     const q = collection(db, "company");
     onSnapshot(q, (snapshot) => {
@@ -135,10 +133,11 @@ function listenToDataCompany() {
                 t: false,
             },)
         });
+
         const dataCompanyTrue = localStorage.getItem('CompanyTrue')
+
         if (JSON.parse(dataCompanyTrue)) {
             companyTrue = JSON.parse(dataCompanyTrue)
-
             filterCompanyTrue()
         } else {
             saveCompanyTrue()
@@ -146,7 +145,9 @@ function listenToDataCompany() {
         CompanyMenuCreat()  // вызываем перерисовку сайта
         startFilterC()
     });
+
 }
+
 /////////////////////// ---------------- ///////////////////////
 
 /////////////////////// Удаления компаний а также драйверов ///////////////////////
@@ -187,7 +188,7 @@ function CompanyMenuCreat() {
         let butMainCenterBottom = document.createElement('div')
 
         butMainCanterH1.innerHTML = element.name;
-
+        
         if (element.t) {
             butMainCanter.classList.add('but-main-center-ready')
         } else {
@@ -239,13 +240,10 @@ function CompanyMenuCreat() {
                     saveCompanyTrue()
                 }
             });
-            listenToData()
+            listenToData(butMainCanterButH1[index].innerHTML)
         })
     });
 }
-
-
-let tabs2 = document.querySelectorAll('.but-main-canter')
 
 // Событие начала перетаскивания
 function dragStartC(e) {
@@ -323,7 +321,6 @@ function saveToLocalStorageC() {
 function startFilterC() {
     companyFilter.forEach((init) => {
         company.push(init)
-        // company.sort((a, b) => a.name.localeCompare(b.name));
     });
 
     loadFromLocalStorageC();
@@ -333,7 +330,9 @@ function startFilterC() {
 /////////////////////// ---------- ///////////////////////
 
 /////////////////////// добовления компаний и логига действия ///////////////////////
+
 let addCompanyBut = document.querySelector('.add-company-but') // берем кнопку
+
 addCompanyBut.onclick = (() => { // датчик нажатия на кнопку
     let trueFalseMenuCompany = confirm(`Для добовления нажмите → ОК
 Для удаления нажмите → Отмена`) // текс для опроса для выбора между удалением и добовлением
@@ -369,6 +368,7 @@ addCompanyBut.onclick = (() => { // датчик нажатия на кнопк�
 /////////////////////// ---------- ///////////////////////
 
 /////////////////////// Создание нового драйвера ///////////////////////
+
 async function saveData(name, company) {
     const userData = {
         id: Math.random(),
@@ -391,21 +391,33 @@ async function saveData(name, company) {
         console.error("Ошибка при сохранении данных:", e);
     }
 }
+
 /////////////////////// ---------- ///////////////////////
 
 /////////////////////// Получения драйверов через базу данных ///////////////////////
-function listenToData() {
+
+function listenToData(nameDriver) {
     const q = collection(db, "masiv");
     let g = '' // для филтра компаний 
     onSnapshot(q, (snapshot) => {
         masivfilter = []; // очищаем старый массив
         masiv = [] // очищаем старый массив
         masivOff = []
-        companyTrue.forEach(element => { // поиск включенных компаний
+        let hih = 0
+        listenToDataCompany()
+        company.forEach((element, id) => { // поиск включенных компаний
             if (element.t) {
                 g = element.name // сохранения включенных компаний
+            } else {
+                hih += 1
+                if (hih == company.length) {
+                    company[0].t = true
+                    g = company[0].name
+                    saveCompanyTrue()
+                }
             }
         });
+        CompanyMenuCreat()
         snapshot.forEach((doc) => { // получения данных 
             let data = doc.data(); // получаем данные
             if (data.company == g) { // фильтрования и добовления с базы данных драйверов
@@ -441,6 +453,7 @@ function listenToData() {
                 queueColor: doc.data().queueColor,
             },) // нужен для удаления компаний с их нимим драйверами
         });
+
         startFilter(); // вызываем перерисовку сайта
     });
 }
@@ -713,9 +726,6 @@ document.addEventListener("DOMContentLoaded", () => {
 /////////////////////// ---------- ///////////////////////
 let draggedEl = null;
 let draggedIndex = null;
-
-
-
 
 let colorQueue = ['rgba(255, 0, 0, 0.534)', 'rgba(255, 145, 0, 0.534)', 'rgba(10, 124, 0, 0.534)', 'rgba(0, 12, 124, 0.534)', 'rgba(124, 0, 103, 0.534)']
 ////////////////////////////////////////////// СОЗДАНИЯ ЯЧЕЕК ТАБЛИЦЫ //////////////////////////////////////////////
@@ -1769,6 +1779,7 @@ function saveToHistory() {
     const now = new Date();
     const formatted = now.toLocaleString();
 
+    cleanOldHistory();
     // Добавляем текущую копию masivfilter с меткой времени
     historyMassiv.push({
         timestamp: now.getTime(), // сохраняется для расчёта "24 часа"
@@ -1812,7 +1823,7 @@ function setCurrentDateTimeInputs() {
     const earlier = new Date(now.getTime() - 5 * 60 * 1000);
 
     const formatDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-    const formatTime = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    const formatTime = d => `${pad(d.getHours())}:${pad(d.getMinutes() + 1)}`;
 
     dateFromInput.value = formatDate(earlier);
     dateToInput.value = formatDate(now);
@@ -1910,5 +1921,5 @@ setCurrentDateTimeInputs();
 searchHistoryByDateTimeAndName();
 cleanOldHistory()
 window.addEventListener('load', () => {
-  cleanOldHistory();
+    cleanOldHistory();
 });
