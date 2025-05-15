@@ -690,9 +690,9 @@ function changeColorStatus(colors) {
         elements.forEach(el => {
             el.style.backgroundColor = colorMap[className];
             if (colors >= 0.8) {
-                el.style.color = 'white'
+                el.style.color = '#bebebe'
             } else {
-                el.style.color = 'black'
+                el.style.color = 'var(--status)'
             }
         });
     }
@@ -807,7 +807,6 @@ function start() {
             input.statu = true
         }
         var LongIsland = document.createElement('div')
-        LongIsland.innerHTML = 'Long Island'
 
         var fromTime = document.createElement('div')
         var fromInput = document.createElement('input')
@@ -1004,8 +1003,10 @@ function start() {
         QueueLeftBox5.classList.add('QueueLeftBox5', 'QueueLeftBox')
         QueueLeftClear.classList.add('QueueLeftClear', 'QueueLeftBox')
         if (input.LongIsland) {
+            LongIsland.innerHTML = 'Long Island ✔'
             LongIsland.classList.add('Ready')
         } else {
+            LongIsland.innerHTML = 'Long Island ⨉'
             LongIsland.classList.add('off')
         }
         let hr = document.createElement('hr')
@@ -1666,17 +1667,13 @@ function settings(rId) {
         }
     });
     syncSettings(true);
-    // filters esc //
 }
 
 settings()
 
 document.querySelectorAll('input[name="filters"]').forEach((radio, rId) => {
-    // radio.checked = false;
     radio.addEventListener('change', () => {
         setting.filters = radio.value
-        // radio.checked = true;
-
         settings()
     });
 });
@@ -1702,6 +1699,7 @@ function themeSetting() {
         document.documentElement.style.setProperty('--tab-bottom', '#e6e6e6');
         document.documentElement.style.setProperty('--bottom-border-Important', '#808080');
         document.documentElement.style.setProperty('--white-black', '#000000');
+        document.documentElement.style.setProperty('--status', '#1a1a1a');
     } else if (setting.theme == 'Dark') {
         document.documentElement.style.setProperty('--header', '#1b1b1b');
         document.documentElement.style.setProperty('--center-filter', '#ececec1f');
@@ -1722,6 +1720,29 @@ function themeSetting() {
         document.documentElement.style.setProperty('--tab-bottom', '#3d3c3c');
         document.documentElement.style.setProperty('--bottom-border-Important', '#808080');
         document.documentElement.style.setProperty('--white-black', '#a1a1a1');
+        document.documentElement.style.setProperty('--status', '#bebebe');
+    } else if (setting.theme == 'Poisonous') {
+        document.documentElement.style.setProperty('--header', '#00a16c');
+        document.documentElement.style.setProperty('--center-filter', '#00a16c1f');
+        document.documentElement.style.setProperty('--center-filter-anim', '#00a16c3d');
+        document.documentElement.style.setProperty('--center-filter-anim-hover', '#00a16c8c');
+        document.documentElement.style.setProperty('--custom-checkbox', '#00a16c');
+        document.documentElement.style.setProperty('--but-main-canter-hover', '#00a16c');
+        document.documentElement.style.setProperty('--but-main-canter', '#00a16c');
+        document.documentElement.style.setProperty('--aside', '#004730');
+        document.documentElement.style.setProperty('--theme', '#1b1b1bbd');
+        document.documentElement.style.setProperty('--theme-box', '#00a16c');
+        document.documentElement.style.setProperty('--light-gray', '#006845');
+        document.documentElement.style.setProperty('--drag-gray', '#ffffff');
+        document.documentElement.style.setProperty('--main', '#202020');
+        document.documentElement.style.setProperty('--tab', '#004730');
+        document.documentElement.style.setProperty('--tab-local', '#003d2a');
+        document.documentElement.style.setProperty('--tab-border', '#1b1b1bbd');
+        document.documentElement.style.setProperty('--tab-bottom', '#00a16c');
+        document.documentElement.style.setProperty('--bottom-border-Important', '#ffffff94');
+        document.documentElement.style.setProperty('--white-black', '#ffffff');
+        document.documentElement.style.setProperty('--status', '#ffffff');
+
     }
 }
 

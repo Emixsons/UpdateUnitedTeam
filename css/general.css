@@ -5,25 +5,26 @@
 }
 
 :root {
-    --header: #1b1b1b;
-    --center-filter: #ececec1f;
-    --center-filter-anim: #5e5e5e3d;
-    --center-filter-anim-hover: #3131318c;
-    --custom-checkbox: #1b1b1b;
-    --but-main-canter-hover: #004f6c;
-    --but-main-canter: #0085b3;
-    --aside: #2b2b2b;
-    --theme: #1a1a1a;
-    --theme-box: #1b1b1b;
-    --light-gray: #bebebe;
+    --header: #00a16c;
+    --center-filter: #00a16c1f;
+    --center-filter-anim: #00a16c3d;
+    --center-filter-anim-hover: #00a16c8c;
+    --custom-checkbox: #00a16c;
+    --but-main-canter-hover: #00a16c;
+    --but-main-canter: #00a16c;
+    --aside: #004730;
+    --theme: #1b1b1b;
+    --theme-box: #006845;
+    --light-gray: #006845;
     --drag-gray: #ffffff;
-    --main: #222222;
-    --tab: #1f1f1f;
-    --tab-local: #181818;
+    --main: #202020;
+    --tab: #004730;
+    --tab-local: #003d2a;
     --tab-border: #1b1b1bbd;
-    --tab-bottom: #3d3c3c;
-    --bottom-border-Important: #808080;
-    --white-black: #a1a1a1;
+    --tab-bottom: #00a16c;
+    --bottom-border-Important: #ffffff94;
+    --white-black: #ffffff;
+    --status: #ffffff;
 }
 
 body {
@@ -558,6 +559,10 @@ aside {
     transition: 0.3s;
 }
 
+*::placeholder {
+    color: var(--bottom-border-Important);
+}
+
 .name-filter:hover {
     border-color: white;
 }
@@ -877,6 +882,113 @@ aside {
 }
 
 /* Dark ▲ Dark ▲ Dark ▲ Dark ▲ Dark */
+/* Poisonous ▼ Poisonous ▼ Poisonous ▼ Poisonous ▼ Poisonous */
+
+.theme-Poisonous .header-theme {
+    width: 100%;
+    height: 15%;
+    background: #00a16c;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.theme-Poisonous .aside-theme {
+    width: 30%;
+    height: 100%;
+    background: #004730;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.theme-Poisonous .main-theme {
+    width: 70%;
+    height: 85%;
+    background: #202020;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.theme-Poisonous .main-theme-box {
+    width: 90%;
+    height: 90%;
+    /* background: #777db9; */
+    position: absolute;
+    right: 5%;
+    bottom: 5%;
+}
+
+.theme-Poisonous .main-theme-box .main-box {
+    width: 100%;
+    height: 12px;
+    margin-top: 3px;
+    background-color: #004730;
+    /* border: 0.5px solid rgba(128, 128, 128, 0.308); */
+
+}
+
+.theme-Poisonous .main-theme-box .main-box .main-box-top {
+    width: 100%;
+    height: 50%;
+    /* background-color: #ffc477; */
+    display: flex;
+}
+
+.theme-Poisonous .main-theme-box .main-box .main-box-top .main-box-status {
+    width: 25px;
+    height: 100%;
+    background-color: #ffc477;
+    margin-left: 25px;
+    border-radius: 2px;
+}
+
+.theme-Poisonous .main-theme-box .main-box .main-box-top .main-box-LG {
+    width: 20px;
+    height: 100%;
+    background-color: #7cb977;
+    margin-left: 25px;
+}
+
+.theme-Poisonous .main-theme-box .main-box .main-box-top .main-box-ID {
+    width: 15px;
+    height: 100%;
+    background-color: #7b969b;
+    margin-left: 25px;
+    border-radius: 2px 0 0 2px;
+}
+
+.theme-Poisonous .main-theme-box .main-box .main-box-top .main-box-status2 {
+    width: 25px;
+    height: 100%;
+    background-color: #7cb977;
+    margin-left: 25px;
+    border-radius: 2px;
+}
+
+.theme-Poisonous .main-theme-box .main-box .main-box-top .main-box-LG2 {
+    width: 20px;
+    height: 100%;
+    background-color: #ff7777;
+    margin-left: 25px;
+}
+
+.theme-Poisonous .main-theme-box .main-box .main-box-top .main-box-ID2 {
+    width: 15px;
+    height: 100%;
+    background-color: #b977ae;
+    margin-left: 25px;
+    border-radius: 2px 0 0 2px;
+}
+
+.theme-Poisonous .main-theme-box .main-box .main-box-buttom {
+    width: 100%;
+    height: 50%;
+    background-color: #00a16c;
+}
+
+/* Poisonous ▲ Poisonous ▲ Poisonous ▲ Poisonous ▲ Poisonous */
 
 
 .checkbox-setting-position {
@@ -1246,9 +1358,13 @@ body.drag-cursor-grab {
     resize: none;
     font-size: 18px;
     padding-left: 10px;
-    color: rgb(0, 0, 0);
+    color: var(--bottom-border-Important);
     background-color: rgba(0, 0, 0, 0.096);
     z-index: 0;
+}
+
+.bottom-tab input::placeholder {
+  color: var(--bottom-border-Important); /* или любой другой цвет */
 }
 
 .bottomTabImportant {
