@@ -4,6 +4,22 @@
     box-sizing: border-box;
 }
 
+.comford {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100000;
+    background-color: rgba(255, 153, 51, 0.2);
+    /* тёплый оранжевый полупрозрачный */
+    mix-blend-mode: multiply;
+    /* наложение как в винде */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
 :root {
     --header: #00a16c;
     --center-filter: #00a16c1f;
@@ -478,7 +494,7 @@ aside {
     color: rgba(255, 255, 255, 0.527);
 }
 
-.block-history h4 span{
+.block-history h4 span {
     font-size: 25px;
     font-style: italic;
     font-weight: 400;
@@ -490,7 +506,7 @@ aside {
     color: rgba(255, 255, 255, 0.356);
 }
 
-.block-history h5 span{
+.block-history h5 span {
     font-size: 20px;
     font-style: italic;
     font-weight: 400;
@@ -546,6 +562,7 @@ aside {
 .data-time-histary label {
     color: rgba(255, 255, 255, 0.788);
 }
+
 .name-filter {
     margin-top: 20px;
     background-color: var(--custom-checkbox);
@@ -598,6 +615,7 @@ aside {
     border-color: white;
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.377);
 }
+
 /* ▲ history ▲ */
 .theme {
     width: 100%;
@@ -1364,7 +1382,8 @@ body.drag-cursor-grab {
 }
 
 .bottom-tab input::placeholder {
-  color: var(--bottom-border-Important); /* или любой другой цвет */
+    color: var(--bottom-border-Important);
+    /* или любой другой цвет */
 }
 
 .bottomTabImportant {
@@ -1723,6 +1742,16 @@ body {
 /* POSITION ↑*/
 
 .slider-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1vh;
+    font-size: 1.6vh;
+    font-family: sans-serif;
+    color: rgb(230, 230, 230);
+    margin: 1vh;
+}
+
+.slider-Comfort {
     display: flex;
     align-items: center;
     gap: 1vh;

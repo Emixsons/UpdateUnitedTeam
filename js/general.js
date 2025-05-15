@@ -188,7 +188,7 @@ function CompanyMenuCreat() {
         let butMainCenterBottom = document.createElement('div')
 
         butMainCanterH1.innerHTML = element.name;
-        
+
         if (element.t) {
             butMainCanter.classList.add('but-main-center-ready')
         } else {
@@ -1944,3 +1944,37 @@ cleanOldHistory()
 window.addEventListener('load', () => {
     cleanOldHistory();
 });
+
+
+// Comfort Filter ▼//
+
+document.addEventListener("DOMContentLoaded", () => {
+    const slider = document.getElementById("mySliderComfort");
+    const valueDisplay = document.getElementById("slider-Comfort-value");
+    const overlay = document.querySelector(".comford");
+
+    function applyComfortFilter(value) {
+        value = parseFloat(value);
+        if (value === 0) {
+            overlay.style.opacity = 0;
+        } else {
+            overlay.style.opacity = value;
+        }
+    }
+
+    const saved = localStorage.getItem("comfort-filter");
+    if (saved !== null) {
+        slider.value = saved;
+        valueDisplay.textContent = saved;
+        applyComfortFilter(saved);
+    }
+
+    slider.addEventListener("input", () => {
+        const value = slider.value;
+        valueDisplay.textContent = value;
+        localStorage.setItem("comfort-filter", value);
+        applyComfortFilter(value);
+    });
+});
+
+// Comfort Filter ▲ //
