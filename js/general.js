@@ -1,5 +1,9 @@
 let mainTab = document.querySelector('.main-tab')
-
+document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible") {
+        location.reload();
+    }
+});
 /////////////////////// хранилище ///////////////////////
 
 let generalMasiv = []
@@ -1544,7 +1548,7 @@ let SettingPosition = document.querySelector('.setting-position')
 let FilterCheckBox = document.querySelectorAll('.custom-checkbox')
 let SettingDesign = document.querySelector('.setting-design')
 let SettingTheme = document.querySelector('.setting-theme')
-let SettingHistory = document.querySelector('.setting-history')
+// let SettingHistory = document.querySelector('.setting-history')
 
 let setting = {
     filters: 'outside',
@@ -1647,7 +1651,7 @@ function settings(rId) {
         CenterFilterAnim.innerHTML = '▲'
         mainAnim.style.height = '80vh'
     } else {
-        AsideScroll.append(FilterBox, SettingPosition, SettingDesign, SettingTheme, SettingHistory)
+        AsideScroll.append(FilterBox, SettingPosition, SettingDesign, SettingTheme)
         FilterBox.classList.add('center-filter2')
         FilterBox.classList.remove('center-filter')
         FilterCheckBox.forEach(element => {
@@ -1746,6 +1750,7 @@ function themeSetting() {
     }
 }
 
+
 let themeBoxH = document.querySelectorAll('.theme-box h3')
 let themeBoxS = document.querySelectorAll('.theme-box span')
 
@@ -1785,166 +1790,166 @@ themeBox.forEach((box, id) => {
         h3Chang(id);
     });
 });
-
 themeSetting()
 
-let historyCheckbox = document.querySelector('.history-checkbox')
+// histary ▼ histary ▼ histary ▼ histary ▲ histary ▼ histary ▼ histary // 
+// let historyCheckbox = document.querySelector('.history-checkbox')
 
-let historyMassivTab = []
-let companyHistori = []
+// let historyMassivTab = []
+// let companyHistori = []
 
-let historyMassiv = JSON.parse(localStorage.getItem('historyMassiv2')) || [];
-let textHistary = document.querySelector('.text-histary')
+// let historyMassiv = JSON.parse(localStorage.getItem('historyMassiv2')) || [];
+// let textHistary = document.querySelector('.text-histary')
 
-function saveToHistory() {
-    const now = new Date();
-    const formatted = now.toLocaleString();
+// function saveToHistory() {
+//     const now = new Date();
+//     const formatted = now.toLocaleString();
 
-    cleanOldHistory();
-    // Добавляем текущую копию masivfilter с меткой времени
-    historyMassiv.push({
-        timestamp: now.getTime(), // сохраняется для расчёта "24 часа"
-        datetime: now.toLocaleString(), // читаемая дата и время
-        data: [...generalMasiv] // или structuredClone(masivfilter), если вложенные объекты
-    });
+//     cleanOldHistory();
+//     // Добавляем текущую копию masivfilter с меткой времени
+//     historyMassiv.push({
+//         timestamp: now.getTime(), // сохраняется для расчёта "24 часа"
+//         datetime: now.toLocaleString(), // читаемая дата и время
+//         data: [...generalMasiv] // или structuredClone(masivfilter), если вложенные объекты
+//     });
 
-    // Удаляем записи старше 24 часов (86400000 мс)
+//     // Удаляем записи старше 24 часов (86400000 мс)
 
-    localStorage.setItem('historyMassiv2', JSON.stringify(historyMassiv));
-}
+//     localStorage.setItem('historyMassiv2', JSON.stringify(historyMassiv));
+// }
 
-function cleanOldHistory() {
-    const now = Date.now();
-    historyMassiv = historyMassiv.filter(entry => now - entry.timestamp <= 36000000);
-    localStorage.setItem('historyMassiv2', JSON.stringify(historyMassiv));
+// function cleanOldHistory() {
+//     const now = Date.now();
+//     historyMassiv = historyMassiv.filter(entry => now - entry.timestamp <= 36000000);
+//     localStorage.setItem('historyMassiv2', JSON.stringify(historyMassiv));
 
-}
+// }
 
-// Запускаем каждые 5 минут
-setInterval(saveToHistory, 1 * 60 * 1000);
+// // Запускаем каждые 5 минут
+// setInterval(saveToHistory, 1 * 60 * 1000);
 
-const dateInputs = document.querySelectorAll('.data-time-histary input[type="date"]');
-const timeInputs = document.querySelectorAll('.data-time-histary input[type="time"]');
-const nameInput = document.querySelector('.data-time-histary .name-filter');
-// const textHistary = document.querySelector('.text-histary');
+// const dateInputs = document.querySelectorAll('.data-time-histary input[type="date"]');
+// const timeInputs = document.querySelectorAll('.data-time-histary input[type="time"]');
+// const nameInput = document.querySelector('.data-time-histary .name-filter');
+// // const textHistary = document.querySelector('.text-histary');
 
-const dateFromInput = dateInputs[0];
-const dateToInput = dateInputs[1];
-const timeFromInput = timeInputs[0];
-const timeToInput = timeInputs[1];
+// const dateFromInput = dateInputs[0];
+// const dateToInput = dateInputs[1];
+// const timeFromInput = timeInputs[0];
+// const timeToInput = timeInputs[1];
 
-// let historyMassivTab = [];
+// // let historyMassivTab = [];
 
-function pad(n) {
-    return n.toString().padStart(2, '0');
-}
+// function pad(n) {
+//     return n.toString().padStart(2, '0');
+// }
 
-function setCurrentDateTimeInputs() {
-    const now = new Date();
-    const earlier = new Date(now.getTime() - 5 * 60 * 1000);
+// function setCurrentDateTimeInputs() {
+//     const now = new Date();
+//     const earlier = new Date(now.getTime() - 5 * 60 * 1000);
 
-    const formatDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-    const formatTime = d => `${pad(d.getHours())}:${pad(d.getMinutes() + 1)}`;
+//     const formatDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+//     const formatTime = d => `${pad(d.getHours())}:${pad(d.getMinutes() + 1)}`;
 
-    dateFromInput.value = formatDate(earlier);
-    dateToInput.value = formatDate(now);
-    timeFromInput.value = formatTime(earlier);
-    timeToInput.value = formatTime(now);
-}
+//     dateFromInput.value = formatDate(earlier);
+//     dateToInput.value = formatDate(now);
+//     timeFromInput.value = formatTime(earlier);
+//     timeToInput.value = formatTime(now);
+// }
 
-function searchHistoryByDateTimeAndName() {
-    const fromDate = dateFromInput.value;
-    const toDate = dateToInput.value;
-    const fromTime = timeFromInput.value;
-    const toTime = timeToInput.value;
-    const nameFilter = nameInput.value.trim().toLowerCase();
+// function searchHistoryByDateTimeAndName() {
+//     const fromDate = dateFromInput.value;
+//     const toDate = dateToInput.value;
+//     const fromTime = timeFromInput.value;
+//     const toTime = timeToInput.value;
+//     const nameFilter = nameInput.value.trim().toLowerCase();
 
-    if (!fromDate || !toDate || !fromTime || !toTime) return;
+//     if (!fromDate || !toDate || !fromTime || !toTime) return;
 
-    const fromTimestamp = new Date(`${fromDate}T${fromTime}`).getTime();
-    const toTimestamp = new Date(`${toDate}T${toTime}`).getTime();
+//     const fromTimestamp = new Date(`${fromDate}T${fromTime}`).getTime();
+//     const toTimestamp = new Date(`${toDate}T${toTime}`).getTime();
 
-    const matches = historyMassiv.filter(entry => {
-        return entry.timestamp >= fromTimestamp && entry.timestamp <= toTimestamp;
-    });
+//     const matches = historyMassiv.filter(entry => {
+//         return entry.timestamp >= fromTimestamp && entry.timestamp <= toTimestamp;
+//     });
 
-    historyMassivTab = [];
+//     historyMassivTab = [];
 
-    matches.forEach(entry => {
-        const filteredData = entry.data.filter(el => {
-            if (nameFilter.length < 2) return true; // не фильтруем по имени, если менее 2 символов
-            return el.name.toLowerCase().includes(nameFilter);
-        });
+//     matches.forEach(entry => {
+//         const filteredData = entry.data.filter(el => {
+//             if (nameFilter.length < 2) return true; // не фильтруем по имени, если менее 2 символов
+//             return el.name.toLowerCase().includes(nameFilter);
+//         });
 
-        if (filteredData.length > 0) {
-            historyMassivTab.push({
-                datetime: entry.datetime,
-                timestamp: entry.timestamp, // добавляем для сортировки
-                data: filteredData
-            });
-        }
-    });
+//         if (filteredData.length > 0) {
+//             historyMassivTab.push({
+//                 datetime: entry.datetime,
+//                 timestamp: entry.timestamp, // добавляем для сортировки
+//                 data: filteredData
+//             });
+//         }
+//     });
 
-    CreatHistary();
-}
+//     CreatHistary();
+// }
 
-function CreatHistary() {
-    historyMassivTab.sort((b, a) => a.timestamp - b.timestamp);
-    textHistary.innerHTML = '';
+// function CreatHistary() {
+//     historyMassivTab.sort((b, a) => a.timestamp - b.timestamp);
+//     textHistary.innerHTML = '';
 
-    let queryPost = 0
+//     let queryPost = 0
 
-    if (historyMassivTab.length === 0) {
-        textHistary.innerHTML = '<p>No matching entries found.</p>';
-        return;
-    }
+//     if (historyMassivTab.length === 0) {
+//         textHistary.innerHTML = '<p>No matching entries found.</p>';
+//         return;
+//     }
 
-    historyMassivTab.forEach(history => {
-        // Выводим дату/время сохранения
-        // textHistary.innerHTML += ``;
-        history.data.forEach(element => {
-            if (queryPost < 30) {
-                textHistary.innerHTML += `
-                <div class="block-history">
-                <h5 class="history-timestamp">Saved at: <span>${history.datetime}</span></h5>
-                <h4>Company: <span>${element.company}</span></h4>
-                <h5>Name: <span>${element.name}</span></h5>
-                <h5>Status: <span>${element.statusAnd}</span></h5>
-                <h5>From Time: <span>${element.fromTime}</span></h5>
-                <h5>Till Time: <span>${element.tillTime}</span></h5>
-                <h5>Long Island: <span>${element.LongIsland}</span></h5>
-                <h5>Local: <span>${element.location}</span></h5>
-                <h5>Queue: <span>${element.queue}</span></h5>
-                <h5 class="notesHistary">Notes: <span>${element.bottomTabText}</span></h5>
-                <br><hr>
-                </div>
-                `;
-                queryPost += 1
-            }
-        });
-    });
+//     historyMassivTab.forEach(history => {
+//         // Выводим дату/время сохранения
+//         // textHistary.innerHTML += ``;
+//         history.data.forEach(element => {
+//             if (queryPost < 30) {
+//                 textHistary.innerHTML += `
+//                 <div class="block-history">
+//                 <h5 class="history-timestamp">Saved at: <span>${history.datetime}</span></h5>
+//                 <h4>Company: <span>${element.company}</span></h4>
+//                 <h5>Name: <span>${element.name}</span></h5>
+//                 <h5>Status: <span>${element.statusAnd}</span></h5>
+//                 <h5>From Time: <span>${element.fromTime}</span></h5>
+//                 <h5>Till Time: <span>${element.tillTime}</span></h5>
+//                 <h5>Long Island: <span>${element.LongIsland}</span></h5>
+//                 <h5>Local: <span>${element.location}</span></h5>
+//                 <h5>Queue: <span>${element.queue}</span></h5>
+//                 <h5 class="notesHistary">Notes: <span>${element.bottomTabText}</span></h5>
+//                 <br><hr>
+//                 </div>
+//                 `;
+//                 queryPost += 1
+//             }
+//         });
+//     });
 
-}
+// }
 
-// Слушатели
-[
-    dateFromInput,
-    dateToInput,
-    timeFromInput,
-    timeToInput,
-    nameInput
-].forEach(input => {
-    input.addEventListener('input', searchHistoryByDateTimeAndName);
-});
+// // Слушатели
+// [
+//     dateFromInput,
+//     dateToInput,
+//     timeFromInput,
+//     timeToInput,
+//     nameInput
+// ].forEach(input => {
+//     input.addEventListener('input', searchHistoryByDateTimeAndName);
+// });
 
-// Старт
-setCurrentDateTimeInputs();
-searchHistoryByDateTimeAndName();
-cleanOldHistory()
-window.addEventListener('load', () => {
-    cleanOldHistory();
-});
-
+// // Старт
+// setCurrentDateTimeInputs();
+// searchHistoryByDateTimeAndName();
+// cleanOldHistory()
+// window.addEventListener('load', () => {
+//     cleanOldHistory();
+// });
+// histary ▲ histary ▲ histary ▲ histary ▲ histary ▲ histary ▲ histary //
 
 // Comfort Filter ▼//
 
