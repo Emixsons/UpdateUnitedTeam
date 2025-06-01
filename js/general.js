@@ -1704,6 +1704,7 @@ function themeSetting() {
         document.documentElement.style.setProperty('--bottom-border-Important', '#808080');
         document.documentElement.style.setProperty('--white-black', '#000000');
         document.documentElement.style.setProperty('--status', '#1a1a1a');
+        document.documentElement.style.setProperty('--bottom-tab', '#1f1f1f');
     } else if (setting.theme == 'Dark') {
         document.documentElement.style.setProperty('--header', '#1b1b1b');
         document.documentElement.style.setProperty('--center-filter', '#ececec1f');
@@ -1725,6 +1726,7 @@ function themeSetting() {
         document.documentElement.style.setProperty('--bottom-border-Important', '#808080');
         document.documentElement.style.setProperty('--white-black', '#a1a1a1');
         document.documentElement.style.setProperty('--status', '#bebebe');
+        document.documentElement.style.setProperty('--bottom-tab', '#c2c2c2');
     } else if (setting.theme == 'Poisonous') {
         document.documentElement.style.setProperty('--header', '#00a16c');
         document.documentElement.style.setProperty('--center-filter', '#00a16c1f');
@@ -1746,7 +1748,7 @@ function themeSetting() {
         document.documentElement.style.setProperty('--bottom-border-Important', '#ffffff94');
         document.documentElement.style.setProperty('--white-black', '#ffffff');
         document.documentElement.style.setProperty('--status', '#ffffff');
-
+        document.documentElement.style.setProperty('--bottom-tab', '#ececec');
     }
 }
 

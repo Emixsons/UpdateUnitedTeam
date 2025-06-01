@@ -41,6 +41,7 @@
     --bottom-border-Important: #ffffff94;
     --white-black: #ffffff;
     --status: #ffffff;
+    --bottom-tab: #ececec;
 }
 
 body {
@@ -1376,7 +1377,7 @@ body.drag-cursor-grab {
     resize: none;
     font-size: 18px;
     padding-left: 10px;
-    color: var(--bottom-border-Important);
+    color: var(--bottom-tab);
     background-color: rgba(0, 0, 0, 0.096);
     z-index: 0;
 }
