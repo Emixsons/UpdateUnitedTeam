@@ -858,7 +858,21 @@ function start() {
         var location = document.createElement('div')
         var localInput = document.createElement('input')
         localInput.setAttribute('type', 'text')
-        localInput.value = input.location
+        // localInput.value = input.location
+
+        function formatLocation(location) {
+            let parts = location.trim().split(',');
+            let city = parts[0].toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+
+            if (parts.length === 2) {
+                let state = parts[1].trim().toUpperCase();
+                return `${city}, ${state}`;
+            } else {
+                return city;
+            }
+        }
+        localInput.value = formatLocation(input.location);
+
         localInput.addEventListener('change', function (a) {
             input.location = a.target.value
             updateData(input.idPass, { location: a.target.value, })
