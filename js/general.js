@@ -1,9 +1,22 @@
 let mainTab = document.querySelector('.main-tab')
+
+
+
+
+const RELOAD_INTERVAL_MINUTES = 5; // ← здесь задаёшь интервал (в минутах)
+
 document.addEventListener("visibilitychange", function () {
     if (document.visibilityState === "visible") {
-        location.reload();
+        const lastReload = localStorage.getItem("lastReloadTime");
+        const now = Date.now();
+
+        if (!lastReload || now - parseInt(lastReload, 10) > RELOAD_INTERVAL_MINUTES * 60 * 1000) {
+            localStorage.setItem("lastReloadTime", now.toString());
+            location.reload();
+        }
     }
 });
+
 /////////////////////// хранилище ///////////////////////
 
 let generalMasiv = []
@@ -15,6 +28,7 @@ let filters = []
 let company = []
 let companyFilter = []
 let companyTrue = []
+let admins = ''
 
 /////////////////////// ---------- ///////////////////////
 
@@ -53,10 +67,12 @@ setInterval(updateTillTime, 10000); // обновлять каждую секу�
 // →→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→→ //
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, updateDoc, serverTimestamp, addDoc, getDocs, where, query, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
 
 /////////////////////// Конфигурация Firebase ///////////////////////
 
+// это проект где masiv
 const firebaseConfig = {
     apiKey: "AIzaSyBZNS6meqgFrhKhXBZc3spCMHK9hGvSuZ0",
     authDomain: "tokssaupdate.firebaseapp.com",
@@ -67,6 +83,16 @@ const firebaseConfig = {
     measurementId: "G-29QKNF40NH"
 };
 
+// а это где должен быть logs
+const firebaseConfig2 = {
+    apiKey: "AIzaSyDzvxt9__Bqcoq2GfUEJQVr9E2ZAp2-5Ts",
+    authDomain: "accaunt-d22dc.firebaseapp.com",
+    projectId: "accaunt-d22dc",
+    storageBucket: "accaunt-d22dc.firebasestorage.app",
+    messagingSenderId: "780524183858",
+    appId: "1:780524183858:web:9b13657aca9abb5a69b72b",
+    measurementId: "G-GP4GHJE6BF"
+};
 /////////////////////// ---------- ///////////////////////
 
 
@@ -74,6 +100,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+const app2 = initializeApp(firebaseConfig2, "app2");
+const db2 = getFirestore(app2);
 
 /////////////////////// ---------- ///////////////////////
 
@@ -476,16 +505,27 @@ async function deleteData(documentId) {
 /////////////////////// ---------- ///////////////////////
 
 /////////////////////// изменения данных драйверов ///////////////////////
-async function updateData(documentId, newData) {
-    try {
-        const docRef = doc(db, "masiv", documentId);
-        await updateDoc(docRef, newData);
-        listenToData();
-        start();
-        // не нужно вызывать start или listenToData — всё обновится автоматически
-    } catch (e) {
-        console.error("Ошибка при обновлении документа:", e);
+async function updateData(docId, newData, driverName) {
+    const docRef = doc(db, "masiv", docId);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) return;
+
+    const currentData = docSnap.data();
+    const currentUser = getCurrentUser();
+    const changesToUpdate = {};
+
+    for (let key in newData) {
+        if (newData[key] !== currentData[key]) {
+            await logChange(currentUser, key, currentData[key], newData[key], docId, driverName);
+            changesToUpdate[key] = newData[key];
+        }
     }
+
+    if (Object.keys(changesToUpdate).length > 0) {
+        await updateDoc(docRef, changesToUpdate);
+    }
+
+    await clearOldLogs();
 }
 /////////////////////// ---------- ///////////////////////
 listenToData();  // Получаем
@@ -752,7 +792,7 @@ function start() {
         var statusAnd = document.createElement('select')
         statusAnd.addEventListener('change', function (e) {
             input.statusAnd = e.target.value
-            updateData(input.idPass, { statusAnd: e.target.value, })
+            updateData(input.idPass, { statusAnd: e.target.value, }, input.name)
             start()
         })
         var options1 = document.createElement('option')
@@ -819,7 +859,7 @@ function start() {
         fromInput.setAttribute('value', input.fromTime)
         fromInput.addEventListener('change', function (d) {
             input.fromTime = d.target.value
-            updateData(input.idPass, { fromTime: d.target.value, })
+            updateData(input.idPass, { fromTime: d.target.value, }, input.name)
             start()
         })
         var tillTime = document.createElement('div')
@@ -829,7 +869,7 @@ function start() {
         tillInput.setAttribute('value', input.tillTime)
         tillInput.addEventListener('change', function (q) {
             input.tillTime = q.target.value
-            updateData(input.idPass, { tillTime: q.target.value, })
+            updateData(input.idPass, { tillTime: q.target.value, }, input.name)
             start()
         })
         ////////////////////// сравнивает время //////////////////////
@@ -875,7 +915,7 @@ function start() {
 
         localInput.addEventListener('change', function (a) {
             input.location = a.target.value
-            updateData(input.idPass, { location: a.target.value, })
+            updateData(input.idPass, { location: a.target.value, }, input.name)
             start()
         })
         // Queue // Queue // Queue // Queue //
@@ -885,7 +925,7 @@ function start() {
         queueInput.value = input.queue
         queueInput.addEventListener('change', function (a) {
             input.location = a.target.value
-            updateData(input.idPass, { queue: a.target.value, })
+            updateData(input.idPass, { queue: a.target.value, }, input.name)
             start()
         })
         queueInput.setAttribute('maxlength', '2')
@@ -913,7 +953,7 @@ function start() {
         bottomTabText.setAttribute('placeholder', 'Note:')
         bottomTabText.addEventListener('change', function (s) {
             input.bottomTabText = s.target.value
-            updateData(input.idPass, { bottomTabText: s.target.value, })
+            updateData(input.idPass, { bottomTabText: s.target.value, }, input.name)
             start()
         })
         // Creat Notes button Important
@@ -924,12 +964,12 @@ function start() {
             if (input.notesImportant) {
                 bottomTabImportant.classList.remove('bottomTabImportantFalse')
                 bottomTabText.classList.remove('bottomTabTextFalse')
-                updateData(input.idPass, { notesImportant: false, })
+                updateData(input.idPass, { notesImportant: false, }, input.name)
                 start()
             } else {
                 bottomTabImportant.classList.add('bottomTabImportantFalse')
                 bottomTabText.classList.add('bottomTabTextFalse')
-                updateData(input.idPass, { notesImportant: true, })
+                updateData(input.idPass, { notesImportant: true, }, input.name)
                 start()
             }
         })
@@ -962,7 +1002,7 @@ function start() {
                     bottomTabText: '',
                     queue: '',
                     notesImportant: true,
-                })
+                }, input.name)
                 listenToData()
                 start()
             }
@@ -1129,12 +1169,12 @@ function start() {
 
         function longPressAction() {
             if (input.LongIsland) {
-                updateData(input.idPass, { LongIsland: false, })
+                updateData(input.idPass, { LongIsland: false, }, input.name)
                 input.LongIsland = false
                 // Здесь твоя логика для "Да"
             } else {
                 input.LongIsland = true
-                updateData(input.idPass, { LongIsland: true, })
+                updateData(input.idPass, { LongIsland: true, }, input.name)
                 // Здесь твоя логика для "Нет"
             }
             start()
@@ -1221,27 +1261,27 @@ function start() {
 
 
         QueueLeftBox1.onclick = (() => {
-            updateData(input.idPass, { queueColor: '#ff7777', })
+            updateData(input.idPass, { queueColor: '#ff7777', }, input.name)
             // start()
         })
         QueueLeftBox2.onclick = (() => {
-            updateData(input.idPass, { queueColor: '#ffc477', })
+            updateData(input.idPass, { queueColor: '#ffc477', }, input.name)
             // start()
         })
         QueueLeftBox3.onclick = (() => {
-            updateData(input.idPass, { queueColor: '#7cb977', })
+            updateData(input.idPass, { queueColor: '#7cb977', }, input.name)
             // start()
         })
         QueueLeftBox4.onclick = (() => {
-            updateData(input.idPass, { queueColor: '#777db9', })
+            updateData(input.idPass, { queueColor: '#777db9', }, input.name)
             // start()
         })
         QueueLeftBox5.onclick = (() => {
-            updateData(input.idPass, { queueColor: '#b977ae', })
+            updateData(input.idPass, { queueColor: '#b977ae', }, input.name)
             // start()
         })
         QueueLeftClear.onclick = (() => {
-            updateData(input.idPass, { queueColor: '', })
+            updateData(input.idPass, { queueColor: '', }, input.name)
             // start()
         })
         // let mainsClick = document.querySelector('main')
@@ -1269,6 +1309,7 @@ function start() {
         // });
 
         /////////////// -------------------------------------- ///////////////
+        // updateData(input.idPass, newData, input.name);
     });
 
 }
@@ -1999,3 +2040,204 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Comfort Filter ▲ //
+
+// sign up //
+
+// Проверка: уже авторизован?
+let navbar = document.querySelector('.navbar')
+let creatDivs = document.querySelector('.creat-div')
+let addCompanyButs = document.querySelector('.add-company-but')
+let adminss = document.querySelector('.admins')
+let adminPanel = document.querySelector('.admin-panel')
+let adminsClick = false
+let butMenu = document.querySelector('.but-menu')
+
+adminss.onclick = (() => {
+    if (adminsClick) {
+        adminsClick = false
+        adminPanel.style.width = '11vh'
+        butMenu.style.top = '0'
+        // adminss.style.opacity = '1'
+
+    } else {
+        adminsClick = true
+        adminPanel.style.width = '30vh'
+        butMenu.style.top = '7vh'
+        // adminss.style.opacity = '0'
+
+    }
+})
+
+
+let isLogin = true;
+
+const formTitle = document.getElementById("formTitle");
+const toggleAuth = document.getElementById("toggleAuth");
+const authForm = document.getElementById("authForm");
+const message = document.getElementById("message");
+
+// Функция для получения массива пользователей из localStorage
+function getSavedUsers() {
+    const users = localStorage.getItem("savedUsers");
+    return users ? JSON.parse(users) : [];
+}
+
+// Функция для сохранения массива пользователей в localStorage
+function saveUsers(users) {
+    localStorage.setItem("savedUsers", JSON.stringify(users));
+}
+
+// Функция авто-входа, если в localStorage что-то есть
+async function autoLogin() {
+    const savedUsers = getSavedUsers();
+    if (savedUsers.length > 0) {
+        const { username, password } = savedUsers[0]; // берем первого пользователя из массива
+
+        // Пробуем войти с этими данными (копируем твою логику проверки)
+        const usersRef = collection(db2, "users");
+        const q = query(usersRef, where("username", "==", username));
+        const snapshot = await getDocs(q);
+
+        if (!snapshot.empty) {
+            const userData = snapshot.docs[0].data();
+            if (userData.password === password) {
+                message.textContent = `Автоматический вход успешен для пользователя ${username}!`;
+                message.className = "success-message";
+                navbar.style.display = 'none'
+                adminss.innerHTML = username
+                // Тут можно перейти на другую страницу или изменить UI
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+// При загрузке страницы пытаемся авто-войти
+window.addEventListener("load", async () => {
+    const loggedIn = await autoLogin();
+    if (!loggedIn) {
+        // Если авто-вход не удался — показываем форму
+        authForm.style.display = "block";
+    } else {
+        // Если авто-вход прошел — можно скрыть форму
+        authForm.style.display = "none";
+    }
+});
+
+toggleAuth.addEventListener("click", () => {
+    isLogin = !isLogin;
+    formTitle.textContent = isLogin ? "Вход" : "Регистрация";
+    toggleAuth.textContent = isLogin ? "Нет аккаунта? Зарегистрируйтесь" : "Уже есть аккаунт? Войти";
+    message.textContent = "";
+});
+
+authForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (username === "" || password === "") {
+        message.textContent = "Пожалуйста, заполните все поля";
+        message.className = "error-message";
+        return;
+    }
+
+    const usersRef = collection(db2, "users");
+    const q = query(usersRef, where("username", "==", username));
+    const snapshot = await getDocs(q);
+
+    if (isLogin) {
+        if (snapshot.empty) {
+            message.textContent = "Пользователь не найден";
+            message.className = "error-message";
+        } else {
+            const userData = snapshot.docs[0].data();
+            if (userData.password === password) {
+                message.textContent = "Успешный вход!";
+                message.className = "success-message";
+                navbar.style.display = 'none'
+                location.reload();
+
+                // Сохраняем пользователя в localStorage (сохраним только одного для простоты)
+                saveUsers([{ username, password }]);
+
+                // Можно скрыть форму после входа
+                authForm.style.display = "none";
+
+                // Тут можно добавить логику перехода на другую страницу
+            } else {
+                message.textContent = "Неверный пароль";
+                message.className = "error-message";
+            }
+        }
+    } else {
+        if (!snapshot.empty) {
+            message.textContent = "Пользователь уже существует";
+            message.className = "error-message";
+        } else {
+            await addDoc(usersRef, {
+                username: username,
+                password: password,
+                createdAt: serverTimestamp(),
+            });
+            message.textContent = "Аккаунт создан успешно!";
+            message.className = "success-message";
+            navbar.style.display = 'none'
+            location.reload();
+            // Сохраняем нового пользователя в localStorage
+            saveUsers([{ username, password }]);
+
+            authForm.style.display = "none";
+        }
+    }
+});
+
+let logOut = document.querySelector('.log-out')
+
+
+logOut.onclick = (() => {
+    if (confirm('Вы уверены?')) {
+        localStorage.removeItem('savedUsers')
+        location.reload();
+    }
+})
+
+
+async function logChange(user, field, oldValue, newValue, idPass, driverName) {
+    const timestamp = new Date().toISOString();
+
+    // Локальное сохранение
+    const logs = JSON.parse(localStorage.getItem('changeLogs')) || [];
+    logs.push({ user, field, oldValue, newValue, idPass, timestamp, driverName });
+    localStorage.setItem('changeLogs', JSON.stringify(logs));
+
+    // Отправка в Firebase второго проекта
+    try {
+        await addDoc(collection(db2, "logs"), {
+            user,
+            field,
+            oldValue,
+            newValue,
+            idPass,
+            timestamp,
+            driverName
+        });
+    } catch (e) {
+        console.error("Ошибка при логировании в db2:", e);
+    }
+}
+
+function clearOldLogs() {
+    const logs = JSON.parse(localStorage.getItem('changeLogs')) || [];
+    const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+
+    const filtered = logs.filter(log => new Date(log.timestamp).getTime() > oneDayAgo);
+    localStorage.setItem('changeLogs', JSON.stringify(filtered));
+}
+
+function getCurrentUser() {
+    const users = JSON.parse(localStorage.getItem('savedUsers')) || [];
+    return users[0]?.username || 'Unknown';
+}
