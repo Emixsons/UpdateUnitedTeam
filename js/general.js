@@ -3,7 +3,7 @@ let mainTab = document.querySelector('.main-tab')
 
 
 
-const RELOAD_INTERVAL_MINUTES = 5; // ← здесь задаёшь интервал (в минутах)
+const RELOAD_INTERVAL_MINUTES = 10; // ← здесь задаёшь интервал (в минутах)
 
 document.addEventListener("visibilitychange", function () {
     if (document.visibilityState === "visible") {
