@@ -1862,3 +1862,18 @@ input[type="range"]::-moz-range-thumb {
 .Ready {
     background-color: rgba(111, 151, 0, 0.6)
 }
+
+.idNameStatusAnd {
+    display: flex;
+    height: 25px;
+}
+
+.FromTimetillTimeLongIsland {
+    display: flex;
+    height: 25px;
+}
+
+.locationQueue {
+    display: flex;
+    height: 25px;
+}

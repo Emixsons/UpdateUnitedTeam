@@ -1,0 +1,46 @@
+@media (max-width: 600px) {
+    .tab-general {
+        display: block;
+        height: 75px;
+    }
+
+    .tab {
+        height: 100px;
+    }
+
+    .idNameStatusAnd {
+        width: 100%;
+    }
+
+    .FromTimetillTimeLongIsland {
+        width: 100%;
+    }
+
+    .locationQueue {
+        width: 100%;
+    }
+
+    .bottom-tab input {
+        width: 94%;
+        left: 1%;
+    }
+
+    .LongIsland {
+        margin-left: 22%;
+    }
+
+    .status-and {
+        border-radius: 0;
+        margin-right: 0.6%;
+        height: 90%;
+        margin-top: 0.4%;
+    }
+
+    .location input {
+        margin-left: 2%;
+    }
+
+    .queue { 
+        margin-left: 42.2%;
+    }
+}

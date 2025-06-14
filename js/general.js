@@ -1035,13 +1035,26 @@ function start() {
             LongIsland.innerHTML = 'Long Island ⨉'
             LongIsland.classList.add('off')
         }
+        let idNameStatusAnd = document.createElement('div')
+        let FromTimetillTimeLongIsland = document.createElement('div')
+        let locationQueue = document.createElement('div')
+
+        idNameStatusAnd.classList.add('idNameStatusAnd')
+        FromTimetillTimeLongIsland.classList.add('FromTimetillTimeLongIsland')
+        locationQueue.classList.add('locationQueue')
+
         let hr = document.createElement('hr')
         hr.classList.add('hr')
         mainTab.append(tab)
         tab.append(tabGeneral, bottomTab, ulLocal)
         bottomTab.append(bottomTabText, bottomTabImportant, menuMousemove)
         menuMousemove.append(menuMousemoveSetting, menuMousemoveGeneralDelet)
-        tabGeneral.append(id, name, statusAnd, fromTime, tillTime, LongIsland, location, queue)
+        tabGeneral.append(idNameStatusAnd, FromTimetillTimeLongIsland, locationQueue)
+
+        idNameStatusAnd.append(id, name, statusAnd,)
+        FromTimetillTimeLongIsland.append(fromTime, tillTime, LongIsland,)
+        locationQueue.append(location, queue)
+
         fromTime.append(fromInput)
         tillTime.append(tillInput)
         location.append(localInput)
