@@ -771,53 +771,55 @@ function start() {
         var options6 = document.createElement('option')
         var options7 = document.createElement('option')
         var options8 = document.createElement('option')
-        options1.innerHTML = 'Off'
-        if (input.statusAnd == 'Off') {
+        options1.innerHTML = 'Off 🚫'
+        if (input.statusAnd == 'Off 🚫' || input.statusAnd == 'Off') {
             statusAnd.classList.add('off')
             options1.setAttribute('selected', '')
         }
-        options2.innerHTML = 'Load Has'
-        if (input.statusAnd == 'Load Has') {
+        options2.innerHTML = 'Load Has 🚚'
+        if (input.statusAnd == 'Load Has 🚚' || input.statusAnd == 'Load Has') {
             statusAnd.classList.add('load-Has')
             options2.setAttribute('selected', '')
             input.statu = true
         }
-        options3.innerHTML = 'Sleeping'
-        if (input.statusAnd == 'Sleeping') {
+        options3.innerHTML = 'Sleeping 💤'
+        if (input.statusAnd == 'Sleeping 💤' || input.statusAnd == 'Sleeping') {
             statusAnd.classList.add('Sleeping')
             options3.setAttribute('selected', '')
             input.statu = false
         }
-        options4.innerHTML = 'Completing'
-        if (input.statusAnd == 'Completing') {
+        options4.innerHTML = 'Completing 🏁'
+        if (input.statusAnd == 'Completing 🏁' || input.statusAnd == 'Completing') {
             statusAnd.classList.add('Completing')
             options4.setAttribute('selected', '')
             input.statu = true
         }
-        options5.innerHTML = 'XRM'
-        if (input.statusAnd == 'XRM') {
+        options5.innerHTML = 'XRM 🗨️'
+        if (input.statusAnd == 'XRM 🗨️' || input.statusAnd == 'XRM') {
             statusAnd.classList.add('XRM')
             input.statu = false
             options5.setAttribute('selected', '')
         }
-        options6.innerHTML = 'No info'
-        if (input.statusAnd == 'No info') {
+        options6.innerHTML = 'No info ❔'
+        if (input.statusAnd == 'No info ❔' || input.statusAnd == 'No info') {
             statusAnd.classList.add('No-info')
             options6.setAttribute('selected', '')
             input.statu = false
         }
-        options7.innerHTML = 'Deadhead'
-        if (input.statusAnd == 'Deadhead') {
+        options7.innerHTML = 'Deadhead 🛣️'
+        if (input.statusAnd == 'Deadhead 🛣️' || input.statusAnd == 'Deadhead') {
             statusAnd.classList.add('Deadhead')
             options7.setAttribute('selected', '')
             input.statu = true
         }
-        options8.innerHTML = 'Ready'
-        if (input.statusAnd == 'Ready') {
+        options8.innerHTML = 'Ready 📭'
+        if (input.statusAnd == 'Ready 📭' || input.statusAnd == 'Ready') {
             statusAnd.classList.add('Ready')
             options8.setAttribute('selected', '')
             input.statu = true
         }
+
+
         var LongIsland = document.createElement('div')
 
         var fromTime = document.createElement('div')
@@ -891,6 +893,18 @@ function start() {
         let queue = document.createElement('div')
         let queueInput = document.createElement('input')
         queueInput.value = input.queue
+        if (input.queue == 1) {
+            queueInput.value = "🥇"
+            queueInput.style.fontSize = '22px'
+        }
+        if (input.queue == 2) {
+            queueInput.value = "🥈"
+            queueInput.style.fontSize = '22px'
+        }
+        if (input.queue == 3) {
+            queueInput.value = "🥉"
+            queueInput.style.fontSize = '22px'
+        }
         queueInput.addEventListener('change', function (a) {
             input.location = a.target.value
             updateData(input.idPass, { queue: a.target.value, })
@@ -1432,7 +1446,7 @@ function startFilter() {
     masivOff = []
     if (filter.LoadHas) {
         masivfilter.forEach((init) => {
-            if (init.statusAnd == 'Load Has') {
+            if (init.statusAnd == 'Load Has 🚚' || init.statusAnd == 'Load Has') {
                 masiv.push(init)
                 masiv.sort((a, b) => a.name.localeCompare(b.name));
             }
@@ -1440,7 +1454,7 @@ function startFilter() {
     }
     if (filter.Completing) {
         masivfilter.forEach((init) => {
-            if (init.statusAnd == 'Completing') {
+            if (init.statusAnd == 'Completing 🏁' | init.statusAnd == 'Completing') {
                 masiv.push(init)
                 // masiv.sort((a, b) => a.name.localeCompare(b.name));
             }
@@ -1448,7 +1462,7 @@ function startFilter() {
     }
     if (filter.Deadhead) {
         masivfilter.forEach((init) => {
-            if (init.statusAnd == 'Deadhead') {
+            if (init.statusAnd == 'Deadhead 🛣️' | init.statusAnd == 'Deadhead') {
                 masiv.push(init)
                 // masiv.sort((a, b) => a.name.localeCompare(b.name));
             }
@@ -1456,7 +1470,7 @@ function startFilter() {
     }
     if (filter.Ready) {
         masivfilter.forEach((init) => {
-            if (init.statusAnd == 'Ready') {
+            if (init.statusAnd == 'Ready 📭' | init.statusAnd == 'Ready') {
                 filterReadyReady.push(init)
                 filterReadyReady.sort((a, b) => a.name.localeCompare(b.name));
             }
@@ -1476,7 +1490,7 @@ function startFilter() {
     }
     if (filter.Sleeping) {
         masivfilter.forEach((init) => {
-            if (init.statusAnd == 'Sleeping') {
+            if (init.statusAnd == 'Sleeping 💤' | init.statusAnd == 'Sleeping') {
                 masiv.push(init)
                 // masiv.sort((a, b) => a.name.localeCompare(b.name));
             }
@@ -1485,7 +1499,7 @@ function startFilter() {
     if (filter.XRM) {
 
         masivfilter.forEach((init) => {
-            if (init.statusAnd == 'XRM') {
+            if (init.statusAnd == 'XRM 🗨️' | init.statusAnd == 'XRM') {
                 masiv.push(init)
                 // masiv.sort((a, b) => a.name.localeCompare(b.name));
             }
@@ -1494,7 +1508,7 @@ function startFilter() {
     if (filter.NoInfo) {
 
         masivfilter.forEach((init) => {
-            if (init.statusAnd == 'No info') {
+            if (init.statusAnd == 'No info ❔' | init.statusAnd == 'No info') {
                 masiv.push(init)
                 // masiv.sort((a, b) => a.name.localeCompare(b.name));
             }
@@ -1503,7 +1517,7 @@ function startFilter() {
     if (filter.Off) {
 
         masivfilter.forEach((init) => {
-            if (init.statusAnd == 'Off') {
+            if (init.statusAnd == 'Off 🚫' | init.statusAnd == 'Off') {
                 masivOff.push(init)
             }
         });
