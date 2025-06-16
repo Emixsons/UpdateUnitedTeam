@@ -771,48 +771,48 @@ function start() {
         var options6 = document.createElement('option')
         var options7 = document.createElement('option')
         var options8 = document.createElement('option')
-        options1.innerHTML = 'Off 🚫'
+        options1.innerHTML = 'Off'
         if (input.statusAnd == 'Off 🚫' || input.statusAnd == 'Off') {
             statusAnd.classList.add('off')
             options1.setAttribute('selected', '')
         }
-        options2.innerHTML = 'Load Has 🚚'
+        options2.innerHTML = 'Load Has'
         if (input.statusAnd == 'Load Has 🚚' || input.statusAnd == 'Load Has') {
             statusAnd.classList.add('load-Has')
             options2.setAttribute('selected', '')
             input.statu = true
         }
-        options3.innerHTML = 'Sleeping 💤'
+        options3.innerHTML = 'Sleeping'
         if (input.statusAnd == 'Sleeping 💤' || input.statusAnd == 'Sleeping') {
             statusAnd.classList.add('Sleeping')
             options3.setAttribute('selected', '')
             input.statu = false
         }
-        options4.innerHTML = 'Completing 🏁'
+        options4.innerHTML = 'Completing'
         if (input.statusAnd == 'Completing 🏁' || input.statusAnd == 'Completing') {
             statusAnd.classList.add('Completing')
             options4.setAttribute('selected', '')
             input.statu = true
         }
-        options5.innerHTML = 'XRM 🗨️'
+        options5.innerHTML = 'XRM'
         if (input.statusAnd == 'XRM 🗨️' || input.statusAnd == 'XRM') {
             statusAnd.classList.add('XRM')
             input.statu = false
             options5.setAttribute('selected', '')
         }
-        options6.innerHTML = 'No info ❔'
+        options6.innerHTML = 'No info'
         if (input.statusAnd == 'No info ❔' || input.statusAnd == 'No info') {
             statusAnd.classList.add('No-info')
             options6.setAttribute('selected', '')
             input.statu = false
         }
-        options7.innerHTML = 'Deadhead 🛣️'
+        options7.innerHTML = 'Deadhead'
         if (input.statusAnd == 'Deadhead 🛣️' || input.statusAnd == 'Deadhead') {
             statusAnd.classList.add('Deadhead')
             options7.setAttribute('selected', '')
             input.statu = true
         }
-        options8.innerHTML = 'Ready 📭'
+        options8.innerHTML = 'Ready'
         if (input.statusAnd == 'Ready 📭' || input.statusAnd == 'Ready') {
             statusAnd.classList.add('Ready')
             options8.setAttribute('selected', '')
@@ -893,18 +893,6 @@ function start() {
         let queue = document.createElement('div')
         let queueInput = document.createElement('input')
         queueInput.value = input.queue
-        if (input.queue == 1) {
-            queueInput.value = "🥇"
-            queueInput.style.fontSize = '22px'
-        }
-        if (input.queue == 2) {
-            queueInput.value = "🥈"
-            queueInput.style.fontSize = '22px'
-        }
-        if (input.queue == 3) {
-            queueInput.value = "🥉"
-            queueInput.style.fontSize = '22px'
-        }
         queueInput.addEventListener('change', function (a) {
             input.location = a.target.value
             updateData(input.idPass, { queue: a.target.value, })
