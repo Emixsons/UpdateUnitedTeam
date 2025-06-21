@@ -1,17 +1,33 @@
 let mainTab = document.querySelector('.main-tab')
-const RELOAD_INTERVAL_MINUTES = 30; // ← здесь задаёшь интервал (в минутах)
+const RELOAD_INTERVAL_MINUTES = 30; // сколько минут ждать при возврате на вкладку
+const MAX_OPEN_TIME_MINUTES = 60;  // максимум, сколько можно держать вкладку открытой без обновления
+
+function checkAndReload() {
+    const lastReload = localStorage.getItem("lastReloadTime");
+    const now = Date.now();
+
+    if (!lastReload || now - parseInt(lastReload, 10) > RELOAD_INTERVAL_MINUTES * 60 * 1000) {
+        localStorage.setItem("lastReloadTime", now.toString());
+        location.reload();
+    }
+}
 
 document.addEventListener("visibilitychange", function () {
     if (document.visibilityState === "visible") {
-        const lastReload = localStorage.getItem("lastReloadTime");
-        const now = Date.now();
-
-        if (!lastReload || now - parseInt(lastReload, 10) > RELOAD_INTERVAL_MINUTES * 60 * 1000) {
-            localStorage.setItem("lastReloadTime", now.toString());
-            location.reload();
-        }
+        checkAndReload();
     }
 });
+
+// Добавим таймер, который проверяет каждые 5 минут: если прошло более часа — обновляем
+setInterval(() => {
+    const lastReload = localStorage.getItem("lastReloadTime");
+    const now = Date.now();
+
+    if (!lastReload || now - parseInt(lastReload, 10) > MAX_OPEN_TIME_MINUTES * 60 * 1000) {
+        localStorage.setItem("lastReloadTime", now.toString());
+        location.reload();
+    }
+}, 30 * 60 * 1000); // проверка каждые 5 минут
 
 
 /////////////////////// хранилище ///////////////////////
