@@ -12,6 +12,10 @@ document.addEventListener("visibilitychange", function () {
         }
     }
 });
+
+setInterval(() => {
+    location.reload();
+}, 3600);
 /////////////////////// хранилище ///////////////////////
 
 let generalMasiv = []
