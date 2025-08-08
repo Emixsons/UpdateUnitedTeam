@@ -404,6 +404,7 @@ async function saveData(name, company) {
         id: Math.random(),
         name: name,
         statusAnd: 'Off',
+        inputIdTrak: '',
         fromTime: '',
         tillTime: '',
         location: '',
@@ -456,6 +457,7 @@ function listenToData(nameDriver) {
                     idPass: doc.id,
                     name: doc.data().name,
                     statusAnd: doc.data().statusAnd,
+                    inputIdTrak: doc.data().inputIdTrak,
                     fromTime: doc.data().fromTime,
                     tillTime: doc.data().tillTime,
                     location: doc.data().location,
@@ -472,6 +474,7 @@ function listenToData(nameDriver) {
                 idPass: doc.id,
                 name: doc.data().name,
                 statusAnd: doc.data().statusAnd,
+                inputIdTrak: doc.data().inputIdTrak,
                 fromTime: doc.data().fromTime,
                 tillTime: doc.data().tillTime,
                 location: doc.data().location,
@@ -774,11 +777,24 @@ function start() {
         var id = document.createElement('div')
         id.innerHTML = `<p>${idTabs}</p>`
         var name = document.createElement('div')
+        name.classList.add('name')
+        name.style.display = 'flex' // Добавлено
+        name.style.alignItems = 'center' // Добавлено
         name.innerHTML = `<p>${input.name}</p>`
+        var inputIdTrak = document.createElement('input')
+        inputIdTrak.classList.add('input-id-trak')
+        inputIdTrak.classList.add('Ready')
+        // inputIdTrak.style.flex = '50px' // Добавлено
+        inputIdTrak.value = input.inputIdTrak
         var statusAnd = document.createElement('select')
         statusAnd.addEventListener('change', function (e) {
             input.statusAnd = e.target.value
             updateData(input.idPass, { statusAnd: e.target.value, })
+            start()
+        })
+        inputIdTrak.addEventListener('change', function (e) {
+            input.inputIdTrak = e.target.value
+            updateData(input.idPass, { inputIdTrak: e.target.value, })
             start()
         })
         var options1 = document.createElement('option')
@@ -1072,6 +1088,7 @@ function start() {
         tabGeneral.append(idNameStatusAnd, FromTimetillTimeLongIsland, locationQueue)
 
         idNameStatusAnd.append(id, name, statusAnd,)
+        name.append(inputIdTrak)
         FromTimetillTimeLongIsland.append(fromTime, tillTime, LongIsland,)
         locationQueue.append(location, queue)
 
